@@ -1,0 +1,9 @@
+﻿global using Application.Abstractions.Identity;
+global using Application.Abstractions.Services;
+global using Application.Abstractions.UrlGeneration;
+global using Application.DTOs;
+global using Core.Identity;
+global using Core.Results;
+global using Hangfire;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.Extensions.Logging;

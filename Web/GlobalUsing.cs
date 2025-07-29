@@ -1,0 +1,9 @@
+﻿global using Application.Abstractions.Services;
+global using Application.Abstractions.UrlGeneration;
+global using Application.Logging;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.Abstractions;
+global using Microsoft.AspNetCore.Mvc.Routing;
+global using Shared.Logging;
+global using System.Diagnostics;
+global using Web.Models;
