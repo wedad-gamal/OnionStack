@@ -1,4 +1,4 @@
-﻿namespace Application.Abstractions.UrlGeneration
+﻿namespace Core.Interfaces
 {
     public interface IResetPasswordUrlGenerator
     {

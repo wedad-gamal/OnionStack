@@ -26,7 +26,7 @@ namespace Application.Implementation
             {
                 return new IdentityResultDto()
                 {
-                    Success = false,
+                    Succeeded = false,
                     Errors = new List<string>() { "User is not exists" }
                 };
             }
@@ -38,7 +38,7 @@ namespace Application.Implementation
 
             return new IdentityResultDto()
             {
-                Success = true,
+                Succeeded = true,
                 Errors = new List<string>() { "Reset password email sent successfully" }
             };
         }
@@ -51,10 +51,10 @@ namespace Application.Implementation
                 var result = await _signInManager.PasswordSignInAsync(user, loginDto.Password, loginDto.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return new IdentityResultDto { Success = true };
+                    return new IdentityResultDto { Succeeded = true };
                 }
             }
-            return new IdentityResultDto { Success = false, Errors = new List<string> { "Invalid UserName or Password" } };
+            return new IdentityResultDto { Succeeded = false, Errors = new List<string> { "Invalid UserName or Password" } };
         }
 
         public async Task Logout()
@@ -75,7 +75,7 @@ namespace Application.Implementation
 
             return new IdentityResultDto()
             {
-                Success = result.Succeeded,
+                Succeeded = result.Succeeded,
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
 
@@ -88,14 +88,14 @@ namespace Application.Implementation
             {
                 return new IdentityResultDto()
                 {
-                    Success = false,
+                    Succeeded = false,
                     Errors = new List<string>() { "User is not exists" }
                 };
             }
             await _userManager.ResetPasswordAsync(user, changePasswordDto.Token, changePasswordDto.ConfirmPassword);
             return new IdentityResultDto()
             {
-                Success = true,
+                Succeeded = true,
                 Errors = new List<string>() { "Password reset successfully" }
             };
         }

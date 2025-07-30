@@ -1,16 +1,17 @@
 ﻿
 
 
+using Core.Interfaces.Identity;
+
 namespace Application.Implementation
 {
     public class RoleService : IRoleService
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RoleService> _logger;
-        private readonly UserManager<IApplicationUser> _userManager;
+        private readonly IAppUserManager _userManager;
 
-        public RoleService(RoleManager<IdentityRole> roleManager, ILogger<RoleService> logger,
-            UserManager<IApplicationUser> userManager)
+        public RoleService(RoleManager<IdentityRole> roleManager, ILogger<RoleService> logger, IAppUserManager userManager)
         {
             _roleManager = roleManager;
             _logger = logger;
@@ -22,7 +23,7 @@ namespace Application.Implementation
             _logger.LogInformation($"Adding role {roleName} ");
             try
             {
-                IdentityResult result = new();
+                IdentityResultDto result = new();
                 foreach (var userDto in users)
                 {
                     var user = _userManager.Users.FirstOrDefault(u => u.Id == userDto.Id);
@@ -33,7 +34,7 @@ namespace Application.Implementation
 
                     foreach (var error in result.Errors)
                     {
-                        _logger.LogError(error.Description);
+                        _logger.LogError(error);
                     }
                 }
             }
@@ -56,7 +57,7 @@ namespace Application.Implementation
             return new IdentityResultDto
             {
                 Errors = result.Errors.Select(r => r.Description),
-                Success = result.Succeeded
+                Succeeded = result.Succeeded
             };
         }
 
@@ -89,7 +90,7 @@ namespace Application.Implementation
             return new IdentityResultDto
             {
                 Errors = result.Errors.Select(r => r.Description),
-                Success = result.Succeeded
+                Succeeded = result.Succeeded
             };
         }
 
@@ -110,7 +111,7 @@ namespace Application.Implementation
             return new IdentityResultDto
             {
                 Errors = result.Errors.Select(r => r.Description),
-                Success = result.Succeeded
+                Succeeded = result.Succeeded
             };
         }
     }

@@ -1,6 +1,3 @@
-using Hangfire;
-using Web.Middleware;
-
 namespace Web;
 
 public class Program
@@ -9,9 +6,9 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        BinderModules.WebBinder.Register(builder.Services);
-        BinderModules.InfrastructureBinder.Register(builder.Services, builder.Configuration);
+        builder.Services.AddPresentationServices();
+        builder.Services.AddApplicationServices();
+        builder.Services.AddInfrastructureServices(builder.Configuration);
 
         var app = builder.Build();
 

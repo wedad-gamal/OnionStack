@@ -1,6 +1,6 @@
 ﻿
 
-namespace Web.Helper;
+namespace Web.Services;
 
 public class ResetPasswordUrlGenerator : IResetPasswordUrlGenerator
 {

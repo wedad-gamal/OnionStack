@@ -1,4 +1,4 @@
-﻿namespace Core.Identity
+﻿namespace Core.Interfaces.Identity
 {
     public interface IApplicationUser
     {

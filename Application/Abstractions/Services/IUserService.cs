@@ -1,4 +1,6 @@
-﻿namespace Application.Abstractions.Services
+﻿using Core.Interfaces.Identity;
+
+namespace Application.Abstractions.Services
 {
     public interface IUserService
     {

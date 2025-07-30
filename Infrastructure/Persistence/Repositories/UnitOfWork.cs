@@ -1,5 +1,4 @@
-﻿using Core.Interfaces.Repositories;
-using Infrastructure.Context;
+﻿using Infrastructure.Context;
 using System.Collections.Concurrent;
 
 namespace Infrastructure.Persistence.Repositories
@@ -9,10 +8,9 @@ namespace Infrastructure.Persistence.Repositories
         private readonly DataContext _dataContext;
         private readonly Func<Type, object> _serviceFactory;
         private readonly ConcurrentDictionary<Type, object> _resolved = new();
-        public UnitOfWork(DataContext dataContext, Func<Type, object> serviceFactory)
+        public UnitOfWork(DataContext dataContext)
         {
             _dataContext = dataContext;
-            _serviceFactory = serviceFactory;
         }
 
         public TRepository GetRepository<TRepository>() where TRepository : class

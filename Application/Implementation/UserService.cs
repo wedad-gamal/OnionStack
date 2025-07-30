@@ -1,4 +1,6 @@
-﻿namespace Application.Implementation;
+﻿using Core.Interfaces.Identity;
+
+namespace Application.Implementation;
 
 public class UserService : IUserService
 {
@@ -31,7 +33,7 @@ public class UserService : IUserService
         return new IdentityResultDto
         {
             Errors = result.Errors.Select(r => r.Description),
-            Success = result.Succeeded
+            Succeeded = result.Succeeded
         };
     }
 
@@ -85,7 +87,7 @@ public class UserService : IUserService
             return new IdentityResultDto
             {
                 Errors = result.Errors.Select(r => r.Description),
-                Success = result.Succeeded
+                Succeeded = result.Succeeded
             };
         }
         catch (Exception ex)
@@ -102,7 +104,7 @@ public class UserService : IUserService
         return new IdentityResultDto
         {
             Errors = result.Errors.Select(r => r.Description),
-            Success = result.Succeeded
+            Succeeded = result.Succeeded
         };
 
     }

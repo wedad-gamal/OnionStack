@@ -1,17 +1,27 @@
-﻿using Application.Logging;
-using Core.Identity;
+﻿using Application.Abstractions.Identity;
+using Core.Interfaces.Identity;
+using Hangfire;
+using Infrastructure.BackgroundJobs;
+using Infrastructure.Context;
+using Infrastructure.Email;
+using Infrastructure.Logging;
+using Infrastructure.Persistence.Repositories;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog.Core;
-using Shared.Logging;
 
-
-namespace BinderModules
+namespace Infrastructure.BinderModule
 {
-    public static class InfrastructureBinder
+    public static class InfrastructureServiceRegistration
     {
-        public static void Register(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration config)
         {
+            // Add EF DbContext, Identity, Email, File Storage, etc.
+
 
             services.AddScoped<IApplicationUser, ApplicationUser>();
+            services.AddScoped<IAppUserManager, AppUserManager>();
+
 
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
@@ -21,14 +31,11 @@ namespace BinderModules
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<IEmployeeService, EmployeeService>();
-            services.AddScoped<IRoleService, RoleService>();
-
             services.AddScoped<IApplicationUserFactory, ApplicationUserFactory>();
             services.AddScoped<ILoggerService, SerilogLoggerService>();
             services.AddSingleton<ICorrelationIdContext, CorrelationIdContext>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<ILogEventEnricher>(provider =>
             {
@@ -47,7 +54,7 @@ namespace BinderModules
             services.AddScoped<IOnboardingJob, OnboardingJob>();
             //services.AddScoped<IEmailJob, EmailJob>();
 
+            return services;
         }
     }
-
 }

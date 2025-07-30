@@ -1,4 +1,4 @@
-﻿using Core.Identity;
+﻿using Core.Interfaces.Identity;
 
 
 namespace Infrastructure.Persistence.Identity
