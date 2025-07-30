@@ -1,53 +1,116 @@
-# 🧠 Modular HR System Starter Template
 
-A reusable backend starter for HR systems built with modern .NET architecture patterns. Designed to be scalable, testable, and ready for production workflows.
+# 🧅 OnionStack
 
-## 🌟 Key Features
+A demo ASP.NET Core application following the **Onion Architecture** with modular separation of concerns, MediatR, Identity, and BinderModule integration. Designed to demonstrate scalable, maintainable, and testable code for enterprise-level applications.
 
-- ✅ **Onion Architecture** for clean separation of concerns  
-- ✅ **Dependency Injection** with per-layer BinderModules  
-- ✅ **Hangfire** integration for background onboarding tasks  
-- ✅ **MailKit** for automated email communication  
-- ✅ **Structured Logging** with correlation ID propagation  
-- ✅ **Unit Testing** with xUnit and Moq  
-- ✅ **Framework-Agnostic Service Contracts**  
+---
 
-## 🛠️ Technologies
+## 📐 Architecture
 
-`.NET 8`, `Hangfire`, `MailKit`, `Serilog`, `xUnit`, `Moq`, `EF Core`, `FluentValidation`
+This project implements **Onion Architecture**, also known as **Clean Architecture**, which emphasizes:
 
-## 🚀 Getting Started
+- Separation of concerns
+- Dependency inversion
+- Domain-centric development
+- Infrastructure and UI as plug-ins to the core
+
+### 📁 Layered Structure
+
+```
+
+OnionStack/
+├── Core/            # Domain entities, value objects, domain interfaces
+├── Application/     # Use cases, business logic, DTOs, contracts
+├── Infrastructure/  # EF Core, Identity, Email services, implementations
+├── Web/             # MVC application (Presentation/Host layer)
+├── Shared/          # Cross-cutting concerns (common types, utils)
+├── Tests/           # Unit and integration tests
+
+````
+
+---
+
+## 🚀 Features
+
+- ✅ ASP.NET Core MVC
+- ✅ Onion Architecture
+- ✅ MediatR for CQRS and decoupled communication
+- ✅ ASP.NET Core Identity with custom abstraction
+- ✅ BinderModule pattern for model binding across layers
+- ✅ Dependency Injection with module-wise configuration
+- ✅ Separation of concerns by strict project references
+
+---
+
+## 🔧 Technologies
+
+- .NET 8
+- ASP.NET Core MVC
+- Entity Framework Core
+- MediatR
+- FluentValidation (optional)
+- Hangfire (optional background jobs)
+- xUnit (for testing)
+
+---
+
+## 🧪 Tests
+
+All core services and handlers are covered with unit tests:
 
 ```bash
-git clone https://github.com/<your-username>/modular-hr-starter.git
-cd modular-hr-starter
-dotnet restore
+cd Tests
+dotnet test
+````
+
+---
+
+## 🏗️ Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/wedad-gamal/OnionStack.git
+cd OnionStack
+```
+
+### 2. Run the application
+
+Make sure `.NET 8 SDK` is installed.
+
+```bash
+cd Web
 dotnet run
 ```
 
-## 📦 Architecture Overview
+The app will run at `https://localhost:5001` or `http://localhost:5000`.
 
-- **Core**: Domain models, abstractions, DTOs  
-- **Application**: Service contracts, business logic, validators  
-- **Infrastructure**: DB context, repositories, third-party integrations  
-- **Presentation**: API controllers, middleware, DI configuration  
-- **BackgroundJobs**: Hangfire jobs & orchestration logic  
+---
 
-![Architecture Diagram](assets/architecture-diagram.png) <!-- Add this later when ready -->
+## 📷 UI Screenshots
 
-## 🔧 Roadmap
+*Coming soon:* Bootstrap-based responsive layout for HR system (employee list, role editing, etc.)
 
-- [x] Modular DI binders  
-- [x] Hangfire onboarding flow  
-- [x] Unit tests for services and controllers  
-- [ ] Identity integration with UserManager & RoleManager  
-- [ ] CI/CD pipeline with GitHub Actions  
-- [ ] Interactive API docs with Swagger  
+---
 
-## 📄 License
+## ✍️ Author
 
-MIT – free to use and modify with attribution
+**Wedad Gamal Elden**
+Senior Web Developer
+📧 [wedadgamal@gmail.com](mailto:wedadgamal@gmail.com)
+🌍 [GitHub Profile](https://github.com/wedad-gamal)
 
-## 💬 Let’s Connect
+---
 
-If you’re a fellow backend engineer, recruiter, or open-source enthusiast, feel free to reach out or collaborate!
+## ⭐ Contributions
+
+Contributions are welcome. If you'd like to improve something, feel free to open a pull request or issue.
+
+---
+
+## 📜 License
+
+This project is open-source and available under the [MIT License](LICENSE).
+
+
+
