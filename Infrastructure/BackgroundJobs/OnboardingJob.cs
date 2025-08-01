@@ -4,21 +4,21 @@
     {
         private readonly IEmailService _emailSender;
         private readonly IEmployeeRepository _repo;
-        private readonly ILoggerService _logger;
-        private readonly ICorrelationIdContext _correlationIdContext;
+        private readonly ILoggerManager _logger;
+        private readonly ICorrelationIdAccessor _correlation;
 
-        public OnboardingJob(IEmailService emailSender, IEmployeeRepository repo, ILoggerService logger, ICorrelationIdContext correlationIdContext)
+        public OnboardingJob(IEmailService emailSender, IEmployeeRepository repo, ILoggerManager logger, ICorrelationIdAccessor correlation)
         {
             _emailSender = emailSender;
             _repo = repo;
             _logger = logger;
-            _correlationIdContext = correlationIdContext;
+            _correlation = correlation;
         }
 
         public async Task RunAsync(int employeeId)
         {
             var correlationId = Guid.NewGuid().ToString();
-            correlationId = _correlationIdContext.CorrelationId ?? correlationId;
+            correlationId = _correlation.GetCorrelationId() ?? correlationId;
 
             using (LogContext.PushProperty("CorrelationId", correlationId))
             {

@@ -1,19 +1,24 @@
 ﻿namespace Infrastructure.Logging
 {
-    public class SerilogLoggerService : ILoggerService
+    public class LoggerManager : ILoggerManager
     {
         private readonly ILogger _logger;
-        private readonly ICorrelationIdContext _correlationIdContext;
+        private readonly ICorrelationIdAccessor _correlation;
 
-        public SerilogLoggerService(ICorrelationIdContext correlationIdContext)
+        public LoggerManager(ICorrelationIdAccessor correlationId)
         {
-            _logger = Log.ForContext("SourceContext", "Application");
-            _correlationIdContext = correlationIdContext;
+            //_logger = Log.ForContext("SourceContext", "Application");
+            _correlation = correlationId;
+            _logger = new LoggerConfiguration()
+                           .Enrich.FromLogContext()
+                           .WriteTo.Console()
+                           .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+                           .CreateLogger();
         }
         public void Info(string message, params object[] args)
         {
             var correlationId = Guid.NewGuid().ToString();
-            correlationId = _correlationIdContext.CorrelationId ?? correlationId;
+            correlationId = _correlation.GetCorrelationId();
 
             _logger.ForContext("CorrelationId", correlationId).Information(message, args);
         }

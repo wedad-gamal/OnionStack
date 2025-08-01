@@ -1,5 +1,6 @@
 ﻿
-namespace Application.Implementation
+
+namespace Infrastructure.Services
 {
     public class AccountServices : IAccountService
     {

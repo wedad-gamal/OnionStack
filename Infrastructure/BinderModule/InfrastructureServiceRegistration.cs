@@ -1,14 +1,11 @@
-﻿using Application.Abstractions.Identity;
-using Core.Interfaces.Identity;
-using Hangfire;
-using Infrastructure.BackgroundJobs;
+﻿using Infrastructure.BackgroundJobs;
 using Infrastructure.Context;
 using Infrastructure.Email;
 using Infrastructure.Logging;
 using Infrastructure.Persistence.Repositories;
+using Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog.Core;
 
 namespace Infrastructure.BinderModule
 {
@@ -32,16 +29,19 @@ namespace Infrastructure.BinderModule
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IApplicationUserFactory, ApplicationUserFactory>();
-            services.AddScoped<ILoggerService, SerilogLoggerService>();
-            services.AddSingleton<ICorrelationIdContext, CorrelationIdContext>();
+            services.AddScoped<ILoggerManager, LoggerManager>();
+
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICorrelationIdAccessor, CorrelationIdAccessor>();
+
+
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddScoped<ILogEventEnricher>(provider =>
-            {
-                var context = provider.GetRequiredService<ICorrelationIdContext>();
-                return new CorrelationIdEnricher(context);
-            });
+            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IRoleService, RoleService>();
+
 
             //// 📬 MailKit setup
             services.Configure<EmailSettings>(config.GetSection("MailSettings"));

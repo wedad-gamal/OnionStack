@@ -1,3 +1,5 @@
+
+
 namespace Web;
 
 public class Program
@@ -21,8 +23,8 @@ public class Program
         }
         app.UseHangfireDashboard();
 
-        app.UseMiddleware<CorrelationIdMiddleware>();
         app.UseHttpsRedirection();
+        app.UseMiddleware<CorrelationIdMiddleware>();
         app.UseStaticFiles();
 
         app.UseRouting();

@@ -1,14 +1,12 @@
-﻿using Core.Interfaces.Identity;
-
-namespace Application.Implementation;
+﻿namespace Infrastructure.Services;
 
 public class UserService : IUserService
 {
-    private readonly ILogger<UserService> _logger;
+    private readonly ILoggerManager _logger;
     private readonly UserManager<IApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
-    public UserService(ILogger<UserService> logger, UserManager<IApplicationUser> userManager,
+    public UserService(ILoggerManager logger, UserManager<IApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager)
     {
         _logger = logger;
@@ -17,7 +15,7 @@ public class UserService : IUserService
     }
     public async Task<IdentityResultDto> AssignRoleToUserAsync(string userId, string roleName)
     {
-        _logger.LogInformation("Assigning role {RoleName} to user {UserId}", roleName, userId);
+        _logger.Info("Assigning role {RoleName} to user {UserId}", roleName, userId);
 
         var user = await _userManager.FindByIdAsync(userId);
 
@@ -26,7 +24,7 @@ public class UserService : IUserService
         {
             foreach (var error in result.Errors)
             {
-                _logger.LogWarning("Failed to assign role {RoleName} to user {UserId}: {Error}", roleName, userId, error.Description);
+                _logger.Warn("Failed to assign role {RoleName} to user {UserId}: {Error}", roleName, userId, error.Description);
             }
             throw new InvalidOperationException($"Failed to assign role {roleName} to user {userId}");
         }
@@ -51,7 +49,7 @@ public class UserService : IUserService
 
     public async Task<List<RoleDto>> GetUserRolesDtoAsync(string userId)
     {
-        _logger.LogInformation(userId, "Getting roles for user {UserId}", userId);
+        _logger.Info(userId, "Getting roles for user {UserId}", userId);
 
         var user = await _userManager.FindByIdAsync(userId);
 
@@ -72,7 +70,7 @@ public class UserService : IUserService
 
     public async Task<IdentityResultDto> RemoveRoleFromUserAsync(string userId, string roleName)
     {
-        _logger.LogInformation($"Remove Role from User {userId} - role {roleName}");
+        _logger.Info($"Remove Role from User {userId} - role {roleName}");
 
         try
         {
@@ -81,7 +79,7 @@ public class UserService : IUserService
 
             foreach (var error in result.Errors)
             {
-                _logger.LogError($"Error to remove {roleName} from {user.Id} - {error.Description}");
+                _logger.Error($"Error to remove {roleName} from {user.Id} - {error.Description}");
             }
 
             return new IdentityResultDto
@@ -92,7 +90,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.ToString());
+            _logger.Error(ex.ToString());
             throw;
         }
     }
@@ -111,7 +109,7 @@ public class UserService : IUserService
 
     public async Task<IList<string>> GetUserRolesAsync(string userId)
     {
-        _logger.LogInformation(userId, "Getting roles for user {UserId}", userId);
+        _logger.Info(userId, "Getting roles for user {UserId}", userId);
 
         var user = await _userManager.FindByIdAsync(userId);
 

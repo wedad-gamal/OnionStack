@@ -1,5 +1,4 @@
-﻿using Application.Implementation;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.BinderModule
 {
@@ -10,8 +9,7 @@ namespace Application.BinderModule
             // Add MediatR, services, validators, etc.
 
 
-            services.AddScoped<IEmployeeService, EmployeeService>();
-            services.AddScoped<IRoleService, RoleService>();
+
             return services;
         }
     }

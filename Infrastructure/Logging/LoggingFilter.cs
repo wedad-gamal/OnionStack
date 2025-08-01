@@ -5,13 +5,13 @@ namespace Infrastructure.Logging
 {
     public class LoggingFilter : ILoggingFilter
     {
-        private readonly ILoggerService _logger;
-        private readonly ICorrelationIdContext _correlationIdContext;
+        private readonly ILoggerManager _logger;
+        private readonly ICorrelationIdAccessor _correlation;
 
-        public LoggingFilter(ILoggerService logger, ICorrelationIdContext correlationIdContext)
+        public LoggingFilter(ILoggerManager logger, ICorrelationIdAccessor correlation)
         {
             _logger = logger;
-            _correlationIdContext = correlationIdContext;
+            _correlation = correlation;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -22,7 +22,7 @@ namespace Infrastructure.Logging
             var route = httpContext.Request.Path;
 
             var correlationId = Guid.NewGuid().ToString();
-            correlationId = _correlationIdContext.CorrelationId ?? correlationId;
+            correlationId = _correlation.GetCorrelationId() ?? correlationId;
 
             var user = httpContext.User.Identity?.Name ?? "Anonymous";
 

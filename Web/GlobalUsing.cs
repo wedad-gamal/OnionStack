@@ -1,16 +1,15 @@
 ﻿global using Application.Abstractions.Services;
 global using Application.BinderModule;
-global using Application.Logging;
 global using Core.Interfaces;
 global using Hangfire;
 global using Infrastructure.BinderModule;
 global using Infrastructure.Logging;
+global using Infrastructure.Middleware;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Abstractions;
 global using Microsoft.AspNetCore.Mvc.Routing;
 global using Serilog;
 global using System.Diagnostics;
 global using Web.BinderModule;
-global using Web.Middleware;
 global using Web.Models;
 global using Web.Services;

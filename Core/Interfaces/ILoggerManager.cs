@@ -1,6 +1,6 @@
-﻿namespace Application.Logging
+﻿namespace Core.Interfaces
 {
-    public interface ILoggerService
+    public interface ILoggerManager
     {
         void Info(string message, params object[] args);
         void Warn(string message, params object[] args);

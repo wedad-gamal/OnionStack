@@ -3,10 +3,10 @@ namespace Web.Controllers;
 public class HomeController : Controller
 {
 
-    private readonly ILoggerService _structuredLogger;
+    private readonly ILoggerManager _structuredLogger;
     private readonly IEmployeeService _employeeService;
 
-    public HomeController(ILoggerService structuredLogger, IEmployeeService employeeService)
+    public HomeController(ILoggerManager structuredLogger, IEmployeeService employeeService)
     {
 
         _structuredLogger = structuredLogger;

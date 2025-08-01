@@ -1,8 +1,6 @@
 ﻿
 
-using Application.Abstractions.Background;
-
-namespace Application.Implementation
+namespace Infrastructure.Services
 {
     public class EmployeeService : IEmployeeService
     {

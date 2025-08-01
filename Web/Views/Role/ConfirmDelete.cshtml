@@ -1,0 +1,16 @@
+﻿@model RoleDto
+
+<h3>Are you sure you want to delete this role?</h3>
+<div>
+    <strong>@Model.Name</strong>
+</div>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    @{
+        await Html.RenderPartialAsync("_DetailDeletePartialView");
+     } 
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+

@@ -1,19 +1,21 @@
-﻿
-
-using Application.Implementation;
+﻿using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 
-namespace Tests.Unit.Application.Services;
+namespace Tests.Unit.Infrastructure.Services;
 
 public class RoleServiceTests
 {
     private readonly Mock<RoleManager<IdentityRole>> _mockRoleManager;
     private readonly RoleService _roleService;
 
+
     //public RoleServiceTests()
     //{
     //    var store = new Mock<IRoleStore<IdentityRole>>();
+    //    var loggerMock = new Mock<ILoggerManager>();
+    //    var service = new EmployeeService(loggerMock.Object);
+
     //    _mockRoleManager = new Mock<RoleManager<IdentityRole>>(
     //        store.Object, null, null, null, null
     //    );
