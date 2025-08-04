@@ -1,5 +1,3 @@
-
-
 namespace Web;
 
 public class Program
@@ -21,10 +19,11 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
+        app.UseMiddleware<CorrelationIdMiddleware>();
+        //app.UseMiddleware<RequestResponseLoggingMiddleware>();
         app.UseHangfireDashboard();
 
         app.UseHttpsRedirection();
-        app.UseMiddleware<CorrelationIdMiddleware>();
         app.UseStaticFiles();
 
         app.UseRouting();

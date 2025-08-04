@@ -1,20 +1,18 @@
-﻿global using Application.Abstractions.Background;
+﻿global using Application.Abstractions;
+global using Application.Abstractions.Background;
 global using Application.Abstractions.Identity;
 global using Application.Abstractions.Services;
 global using Application.DTOs;
-global using Application.Logging;
 global using Core.Entities;
 global using Core.Interfaces;
-global using Core.Interfaces.Identity;
 global using Core.Interfaces.Repositories;
-global using Core.Results;
 global using Hangfire;
 global using Infrastructure.Persistence.Identity;
 global using MailKit.Net.Smtp;
+global using Mapster;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Options;
 global using MimeKit;
 global using Serilog;
 global using Serilog.Context;
-

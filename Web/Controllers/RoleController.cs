@@ -1,7 +1,4 @@
-﻿using Application.DTOs;
-using Core.Results;
-
-namespace Web.Controllers
+﻿namespace Web.Controllers
 {
     public class RoleController : Controller
     {
@@ -15,8 +12,8 @@ namespace Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var rolesDtos = await _roleService.GetAsync();
-            return View(rolesDtos);
+            var rolesDto = await _roleService.GetAsync();
+            return View(rolesDto);
         }
 
         public IActionResult Create()

@@ -1,6 +1,4 @@
-﻿using Core.Entities;
-using Core.Interfaces.Repositories;
-using Infrastructure.Context;
+﻿using Infrastructure.Persistence.Context;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -10,10 +8,6 @@ namespace Infrastructure.Persistence.Repositories
         {
         }
 
-        public async Task<IEnumerable<Employee>> GetALlIncludeNameAsync(string name)
-        {
-            var data = await _dbSet.Where(e => string.IsNullOrEmpty(name) || e.FullName.ToLower().Contains(name.ToLower())).ToListAsync();
-            return data;
-        }
+
     }
 }

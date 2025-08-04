@@ -1,7 +1,4 @@
-﻿
-
-
-namespace Web.BinderModule;
+﻿namespace Web.BinderModule;
 
 public static class PresentationServiceRegistration
 {
@@ -18,7 +15,12 @@ public static class PresentationServiceRegistration
 
         services.AddHttpContextAccessor(); // Needed for IHttpContextAccessor
 
-        services.AddScoped<IResetPasswordUrlGenerator, ResetPasswordUrlGenerator>();
+        services.AddScoped<IUrlGenerator, UrlGenerator>();
+
+        //fluent validators
+        services.AddValidatorsFromAssembly(typeof(Application.AssemblyMarker).Assembly); // Register all validators from the Application layer
+        services.AddFluentValidationAutoValidation(); // enables model validation
+        services.AddFluentValidationClientsideAdapters(); // optional for client-side
 
         Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()

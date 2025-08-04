@@ -1,4 +1,4 @@
-﻿using Infrastructure.Context;
+﻿using Infrastructure.Persistence.Context;
 using System.Collections.Concurrent;
 
 namespace Infrastructure.Persistence.Repositories

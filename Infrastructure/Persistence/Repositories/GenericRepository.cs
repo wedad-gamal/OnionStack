@@ -1,5 +1,4 @@
-﻿using Core.Interfaces.Repositories;
-using Infrastructure.Context;
+﻿using Infrastructure.Persistence.Context;
 
 namespace Infrastructure.Persistence.Repositories
 {

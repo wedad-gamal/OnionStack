@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Application.Common.Mapping;
+using Mapster;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.BinderModule
 {
@@ -9,6 +11,12 @@ namespace Application.BinderModule
             // Add MediatR, services, validators, etc.
 
 
+            MapsterConfig.RegisterMappings();
+            services.AddMapster();
+
+            var configInstance = TypeAdapterConfig.GlobalSettings;
+            configInstance.Scan(typeof(AssemblyMarker).Assembly); // Application
+            services.AddSingleton(configInstance);
 
             return services;
         }

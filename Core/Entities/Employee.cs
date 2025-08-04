@@ -1,13 +1,11 @@
-﻿namespace Core.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Core.Entities
 {
     public class Employee
     {
-        public int Id { get; set; }
-        public string FullName => $"{FirstName} {LastName}";
-
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
+        [Key]
+        public int UserId { get; set; }
         public string Position { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime HireDate { get; set; }

@@ -145,7 +145,7 @@
             {
                 foreach (var userDto in users)
                 {
-                    var user = await _userManager.FindByIdAsync(userDto.Id);
+                    var user = await _userManager.GetUserByIdAsync(userDto.Id);
                     if (user == null)
                     {
                         _logger.Warn("User with ID {UserId} not found.", userDto.Id);
@@ -157,11 +157,11 @@
 
                     if (isInRole && !userDto.IsAssigned)
                     {
-                        result = await _userManager.RemoveFromRoleAsync(user, roleName);
+                        result = await _userManager.RemoveRoleFromUserAsync(user, roleName);
                     }
                     else if (!isInRole && userDto.IsAssigned)
                     {
-                        result = await _userManager.AddToRoleAsync(user, roleName);
+                        result = await _userManager.AssignRoleToUserAsync(user, roleName);
                     }
 
                     if (result != null && !result.Succeeded)

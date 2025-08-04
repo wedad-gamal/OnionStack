@@ -32,4 +32,9 @@
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\AppDb\" />
+    <Folder Include="Migrations\IdentityDb\" />
+  </ItemGroup>
+
 </Project>

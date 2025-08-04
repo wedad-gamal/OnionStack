@@ -1,9 +1,2 @@
-﻿global using Application.Abstractions.Identity;
-global using Application.Abstractions.Services;
-global using Application.DTOs;
-global using Core.Interfaces;
-global using Core.Interfaces.Identity;
-global using Core.Results;
-global using Hangfire;
-global using Microsoft.AspNetCore.Identity;
-global using Microsoft.Extensions.Logging;
+﻿global using Application.DTOs;
+global using FluentValidation;

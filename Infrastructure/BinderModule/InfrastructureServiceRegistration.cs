@@ -1,9 +1,8 @@
 ﻿using Infrastructure.BackgroundJobs;
-using Infrastructure.Context;
-using Infrastructure.Email;
-using Infrastructure.Logging;
+using Infrastructure.Persistence.Context;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Services;
+using Infrastructure.Services.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,19 +15,24 @@ namespace Infrastructure.BinderModule
             // Add EF DbContext, Identity, Email, File Storage, etc.
 
 
-            services.AddScoped<IApplicationUser, ApplicationUser>();
-            services.AddScoped<IAppUserManager, AppUserManager>();
-
 
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
 
+            services.AddDbContext<IdentityDbContext>(options =>
+                options.UseSqlServer(config.GetConnectionString("IdentityConnection")));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<DataContext>()  // use your custom DbContext
+                .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
+            var configInstance = TypeAdapterConfig.GlobalSettings;
+            configInstance.Scan(typeof(AssemblyMarker).Assembly); // Infrastructure
+            services.AddSingleton(configInstance);
+
+
+
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<IApplicationUserFactory, ApplicationUserFactory>();
             services.AddScoped<ILoggerManager, LoggerManager>();
 
 
@@ -39,8 +43,11 @@ namespace Infrastructure.BinderModule
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddScoped<IAppUserManager, AppUserManager>();
+            services.AddScoped<ILoggerManager, LoggerManager>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IAccountService, AccountService>();
 
 
             //// 📬 MailKit setup

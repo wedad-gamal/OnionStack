@@ -1,10 +1,15 @@
-﻿global using Application.Abstractions.Services;
+﻿global using Application.Abstractions;
+global using Application.Abstractions.Services;
 global using Application.BinderModule;
+global using Application.DTOs;
+global using Application.Validators.Users;
 global using Core.Interfaces;
+global using FluentValidation;
+global using FluentValidation.AspNetCore;
 global using Hangfire;
 global using Infrastructure.BinderModule;
-global using Infrastructure.Logging;
 global using Infrastructure.Middleware;
+global using Infrastructure.Services.Logging;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Abstractions;
 global using Microsoft.AspNetCore.Mvc.Routing;
