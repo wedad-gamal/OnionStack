@@ -30,19 +30,15 @@ namespace Infrastructure.BinderModule
             configInstance.Scan(typeof(AssemblyMarker).Assembly); // Infrastructure
             services.AddSingleton(configInstance);
 
-
-
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<ILoggerManager, LoggerManager>();
-
-
             services.AddHttpContextAccessor();
-            services.AddScoped<ICorrelationIdAccessor, CorrelationIdAccessor>();
+            services.AddSingleton<ICorrelationIdAccessor, CorrelationIdAccessor>();
 
+            services.AddScoped<ILoggerManager, LoggerManager>();
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IAppUserManager, AppUserManager>();
             services.AddScoped<ILoggerManager, LoggerManager>();
             services.AddScoped<IEmployeeService, EmployeeService>();

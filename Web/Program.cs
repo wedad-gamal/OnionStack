@@ -1,3 +1,5 @@
+using Web.Middleware;
+
 namespace Web;
 
 public class Program
@@ -20,7 +22,7 @@ public class Program
             app.UseHsts();
         }
         app.UseMiddleware<CorrelationIdMiddleware>();
-        //app.UseMiddleware<RequestResponseLoggingMiddleware>();
+        app.UseMiddleware<ExceptionMiddleware>();
         app.UseHangfireDashboard();
 
         app.UseHttpsRedirection();

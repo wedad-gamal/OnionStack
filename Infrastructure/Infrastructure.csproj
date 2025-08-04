@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Middleware\" />
     <Folder Include="Migrations\AppDb\" />
     <Folder Include="Migrations\IdentityDb\" />
   </ItemGroup>

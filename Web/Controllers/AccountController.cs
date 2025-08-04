@@ -51,6 +51,33 @@
             _accountService.Logout();
             return RedirectToAction("Index", "Home");
         }
+
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgotPasswordDto model)
+        {
+            if (!ModelState.IsValid) return View(model);
+            _accountService.ForgotPassword(model.Email, "ResetPassword", "Account");
+            TempData["Success"] = "Check you email, reset link has sent.";
+            return View();
+        }
+
+        public IActionResult ResetPassword(string email, string token)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
+        {
+            if (!ModelState.IsValid) return View(model);
+            _accountService.ResetPasswordAsync(model);
+            return RedirectToAction("Login");
+        }
         private async Task<IActionResult> HandleResult(IdentityResultDto result, IModelDto model, string actionName = "operation")
         {
             if (!result.Succeeded)
