@@ -10,7 +10,7 @@
 <h2 class="alert-danger">@TempData["ErrorMessage"]</h2>
    
 <div>
-    <a class=" btn btn-primary mt-3" asp-action="Create">Create New Department</a>
+    <a class=" btn btn-primary mt-3" asp-action="Create">Create New Role</a>
 </div>
 @if (Model.Any())
 {
@@ -34,6 +34,9 @@
                 </td>
                 <td>
                     Delete
+                </td>
+                 <td>
+                    Assign To Users
                 </td>
 
 
@@ -61,6 +64,10 @@
                     </td>
                     <td>
                         <a asp-action="ConfirmDelete" asp-route-id="@item.Id" class="btn btn-danger"> <i class="fas fa-trash"></i>Delete</a>
+
+                    </td>
+                    <td>
+                        <a asp-action="AssignOrRemoveRoleToUser" asp-route-id="@item.Name" class="btn btn-primary"> <i class="fas fa-edit"></i>Assign</a>
 
                     </td>
 

@@ -3,16 +3,18 @@
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILoggerManager _logger;
+    private readonly IServiceProvider _serviceProvider;
 
-    public ExceptionMiddleware(RequestDelegate next, ILoggerManager logger)
+    public ExceptionMiddleware(RequestDelegate next, IServiceProvider serviceProvider)
     {
         _next = next;
-        _logger = logger;
+        _serviceProvider = serviceProvider;
     }
 
     public async Task InvokeAsync(HttpContext context)
     {
+        var _logger = context.RequestServices.GetRequiredService<ILoggerManager>();
+
         try
         {
             await _next(context);

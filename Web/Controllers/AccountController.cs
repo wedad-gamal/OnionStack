@@ -61,8 +61,9 @@
         public async Task<IActionResult> ForgetPassword(ForgotPasswordDto model)
         {
             if (!ModelState.IsValid) return View(model);
-            _accountService.ForgotPassword(model.Email, "ResetPassword", "Account");
-            TempData["Success"] = "Check you email, reset link has sent.";
+            var result = await _accountService.ForgotPassword(model.Email, "ResetPassword", "Account");
+            if (result.Succeeded)
+                TempData["Success"] = "Check you email, reset link has sent.";
             return View();
         }
 
@@ -75,8 +76,17 @@
         public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
         {
             if (!ModelState.IsValid) return View(model);
-            _accountService.ResetPasswordAsync(model);
-            return RedirectToAction("Login");
+            var result = await _accountService.ResetPasswordAsync(model);
+            if (result.Succeeded)
+            {
+                TempData["Success"] = "Password reset successfully.";
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Failed to reset password.");
+                return View(model);
+            }
         }
         private async Task<IActionResult> HandleResult(IdentityResultDto result, IModelDto model, string actionName = "operation")
         {

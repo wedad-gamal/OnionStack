@@ -1,14 +1,24 @@
-﻿namespace Web.Controllers
+﻿using Application.Abstractions.Identity;
+using Application.Commands;
+using MediatR;
+using Web.ViewModels;
+
+namespace Web.Controllers
 {
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService;
+        private readonly IAppUserManager _appUserManager;
         private readonly ILoggerManager _loggerManager;
+        private readonly IMediator _mediator;
 
-        public RoleController(IRoleService roleService, ILoggerManager loggerManager)
+        public RoleController(IRoleService roleService, IAppUserManager appUserManager, ILoggerManager loggerManager,
+            IMediator mediator)
         {
             _roleService = roleService;
+            _appUserManager = appUserManager;
             _loggerManager = loggerManager;
+            _mediator = mediator;
         }
         public async Task<IActionResult> Index()
         {
@@ -73,6 +83,46 @@
 
             var result = await _roleService.RemoveRoleAsync(role.Name);
             return await HandleResult(result, role, nameof(Delete));
+        }
+
+        [HttpGet("Role/AssignOrRemoveRoleToUser/{roleName}")]
+        public async Task<IActionResult> AssignOrRemoveRoleToUser(string roleName)
+        {
+            if (string.IsNullOrWhiteSpace(roleName))
+                return BadRequest();
+            var role = await _roleService.GetByNameAsync(roleName);
+            var users = await _roleService.GetIsAssignedUsersAllAsync(roleName);
+            var model = new AssignRoleToUsersViewModel
+            {
+                RoleName = roleName,
+                Users = users.Select(u => new UserRoleViewModel()
+                {
+                    Id = u.UserId,
+                    Name = u.UserName,
+                    IsAssigned = u.IsAssigned
+                }).ToList()
+            };
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> HandleAssignRemoveRolesToUser(AssignRoleToUsersViewModel userRoleViewModel)
+        {
+            ChangeRoleCommand changeRoleCommand = new ChangeRoleCommand
+            {
+                RoleName = userRoleViewModel.RoleName,
+                Users = userRoleViewModel.Users.Select(u => new UserRoleDto()
+                {
+                    UserId = u.Id,
+                    RoleName = userRoleViewModel.RoleName,
+                    UserName = u.Name,
+                    IsAssigned = u.IsAssigned
+                })
+            };
+            var result = await _mediator.Send(changeRoleCommand);
+            return RedirectToAction(nameof(Index));
         }
         // ========== Helper Methods ==========
         private async Task<IActionResult> GetDataHandler(string id)

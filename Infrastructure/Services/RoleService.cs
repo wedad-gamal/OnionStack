@@ -137,18 +137,18 @@
             };
         }
 
-        public async Task AddUsersToRoleAsync(string roleName, List<RoleDto> users)
+        public async Task<List<UserRoleResultDto>> AddUsersToRoleAsync(string roleName, IEnumerable<UserRoleDto> users)
         {
             _logger.Info("Adding/removing users for role: {RoleName}", roleName);
-
+            List<UserRoleResultDto> userRoleResults = new List<UserRoleResultDto>();
             try
             {
                 foreach (var userDto in users)
                 {
-                    var user = await _userManager.GetUserByIdAsync(userDto.Id);
+                    var user = await _userManager.GetUserByIdAsync(userDto.UserId);
                     if (user == null)
                     {
-                        _logger.Warn("User with ID {UserId} not found.", userDto.Id);
+                        _logger.Warn("User with ID {UserId} not found.", userDto.UserId);
                         continue;
                     }
 
@@ -170,12 +170,62 @@
                             _logger.Error("Error changing role for user {UserId}: {Error}",
                                 null, user.Id, error);
                     }
+
+                    userRoleResults.Add(new UserRoleResultDto
+                    {
+                        UserId = user.Id,
+                        RoleName = roleName,
+                        UserName = user.UserName,
+                        IsAssigned = userDto.IsAssigned,
+                        Succeed = result?.Succeeded
+                    });
                 }
             }
             catch (Exception ex)
             {
                 _logger.Error("Unexpected error in AddUsersToRoleAsync: {Exception}", ex, ex.ToString());
             }
+            return userRoleResults;
+        }
+
+        public async Task<IEnumerable<UserRoleDto>> GetAllAsync(string roleName)
+        {
+            _logger.Info("Get all user roles ");
+            var role = await _roleManager.FindByNameAsync(roleName);
+
+            if (role == null)
+            {
+                _logger.Warn("Role {RoleName} not found.", roleName);
+                return Enumerable.Empty<UserRoleDto>();
+            }
+            var users = await _userManager.GetAllUsersAsync();
+            var userRoles = new List<UserRoleDto>();
+            foreach (var user in users)
+            {
+                var isAssigned = await _userManager.IsInRoleAsync(user, roleName);
+                userRoles.Add(new UserRoleDto
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    RoleName = roleName,
+                    IsAssigned = isAssigned
+                });
+
+            }
+            return userRoles;
+        }
+
+        public async Task<IEnumerable<UserRoleDto>> GetIsAssignedUsersAllAsync(string roleName)
+        {
+            var users = await _userManager.GetAllUsersAsync();
+            var result = users.Select(u => new UserRoleDto()
+            {
+                UserId = u.Id,
+                UserName = u.UserName,
+                IsAssigned = _userManager.IsInRoleAsync(u, roleName).Result
+            }).ToList();
+
+            return result;
         }
     }
 }

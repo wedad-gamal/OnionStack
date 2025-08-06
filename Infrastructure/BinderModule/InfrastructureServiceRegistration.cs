@@ -1,10 +1,4 @@
-﻿using Infrastructure.BackgroundJobs;
-using Infrastructure.Persistence.Context;
-using Infrastructure.Persistence.Repositories;
-using Infrastructure.Services;
-using Infrastructure.Services.Logging;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿
 
 namespace Infrastructure.BinderModule
 {
@@ -12,9 +6,10 @@ namespace Infrastructure.BinderModule
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration config)
         {
-            // Add EF DbContext, Identity, Email, File Storage, etc.
 
 
+            services.AddSignalR();
+            services.AddMediatR(typeof(ChangeRoleHandler).Assembly);
 
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
@@ -27,11 +22,11 @@ namespace Infrastructure.BinderModule
                 .AddDefaultTokenProviders();
 
             var configInstance = TypeAdapterConfig.GlobalSettings;
-            configInstance.Scan(typeof(AssemblyMarker).Assembly); // Infrastructure
+            configInstance.Scan(typeof(AssemblyMarker).Assembly);
             services.AddSingleton(configInstance);
 
             services.AddHttpContextAccessor();
-            services.AddSingleton<ICorrelationIdAccessor, CorrelationIdAccessor>();
+            services.AddScoped<ICorrelationIdAccessor, CorrelationIdAccessor>();
 
             services.AddScoped<ILoggerManager, LoggerManager>();
 
@@ -44,10 +39,11 @@ namespace Infrastructure.BinderModule
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<INotificationService, NotificationService>();
 
 
             //// 📬 MailKit setup
-            services.Configure<EmailSettings>(config.GetSection("MailSettings"));
+            services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
             services.AddScoped<IEmailService, EmailService>();
 
             //// 🧵 Hangfire setup

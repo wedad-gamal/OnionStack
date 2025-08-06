@@ -3,6 +3,7 @@
     public interface IAppUserManager
     {
         Task<IdentityResultDto> AssignRoleToUserAsync(UserDto user, string role);
+        Task<IdentityResultDto> AssignRoleToUserAsync(string userId, string role);
         Task<IdentityResultDto> CreateUserAsync(CreateUserDto userDto);
         Task<IdentityResultDto> DeleteUserAsync(string id);
         Task<IEnumerable<UserDto>> GetAllUsersAsync();

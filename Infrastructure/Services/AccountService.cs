@@ -19,6 +19,7 @@
         }
         public async Task<IdentityResultDto> ForgotPassword(string email, string action, string controller)
         {
+
             _loggerManager.Info("Attempting to send password reset email to: {Email}", email);
             var token = await _appUserManager.GeneratePasswordResetTokenAsync(email);
             var url = _urlGenerator.GenerateUrl(email, token, action, controller);
@@ -29,6 +30,7 @@
                 Succeeded = true,
                 Errors = new List<string>() { "Reset password email sent successfully" }
             };
+
         }
 
         public async Task<IdentityResultDto> LoginAsync(LoginDto loginDto)

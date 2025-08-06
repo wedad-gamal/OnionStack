@@ -57,6 +57,19 @@ namespace Infrastructure.Persistence.Identity
             LogIdentityResult(result, $"add user {user.UserName} to role {role}");
             return result.ToDto();
         }
+        public async Task<IdentityResultDto> AssignRoleToUserAsync(string userId, string role)
+        {
+            _loggerManager.Info("Adding user {UserId} to role {Role}", userId, role);
+            var applicationUser = await _userManager.FindByIdAsync(userId);
+            if (applicationUser == null)
+            {
+                _loggerManager.Warn("User not found for role assignment.");
+                return new IdentityResultDto { Succeeded = false, Errors = new[] { "User not found" } };
+            }
+            var result = await _userManager.AddToRoleAsync(applicationUser, role);
+            LogIdentityResult(result, $"add user {userId} to role {role}");
+            return result.ToDto();
+        }
 
         public async Task<IdentityResultDto> RemoveRoleFromUserAsync(UserDto user, string role)
         {
@@ -149,27 +162,45 @@ namespace Infrastructure.Persistence.Identity
         }
         public async Task<string> GeneratePasswordResetTokenAsync(string email)
         {
-            _loggerManager.Info("Generating password reset token for email: {Email}", email);
-            var applicationUser = await _userManager.FindByEmailAsync(email);
-            if (applicationUser == null) return string.Empty;
+            try
+            {
+                _loggerManager.Info("Generating password reset token for email: {Email}", email);
+                var applicationUser = await _userManager.FindByEmailAsync(email);
+                if (applicationUser == null) return string.Empty;
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
-            _loggerManager.Info("Generated password reset token for email: {Email}", email);
-            return token;
+                var token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
+                _loggerManager.Info("Generated password reset token for email: {Email}", email);
+                return token;
 
+
+            }
+            catch (Exception ex)
+            {
+                _loggerManager.Error("An Exception has occured , {ex}", ex);
+                throw;
+            }
         }
         public async Task<IdentityResultDto> ResetPasswordAsync(string email, string token, string newPassword)
         {
-            _loggerManager.Info("Resetting password for email: {Email}", email);
-            var applicationUser = await _userManager.FindByEmailAsync(email);
-            if (applicationUser == null)
+            try
             {
-                _loggerManager.Warn("User not found for password reset.");
-                return new IdentityResultDto { Succeeded = false, Errors = new[] { "User not found" } };
+                _loggerManager.Info("Resetting password for email: {Email}", email);
+                var applicationUser = await _userManager.FindByEmailAsync(email);
+                if (applicationUser == null)
+                {
+                    _loggerManager.Warn("User not found for password reset.");
+                    return new IdentityResultDto { Succeeded = false, Errors = new[] { "User not found" } };
+                }
+                var result = await _userManager.ResetPasswordAsync(applicationUser, token, newPassword);
+                LogIdentityResult(result, $"reset password for user {email}");
+                return result.ToDto();
+
             }
-            var result = await _userManager.ResetPasswordAsync(applicationUser, token, newPassword);
-            LogIdentityResult(result, $"reset password for user {email}");
-            return result.ToDto();
+            catch (Exception ex)
+            {
+                _loggerManager.Error("An error has occured, {ex}", ex);
+                throw;
+            }
         }
 
         public Task<string> GenerateEmailConfirmationTokenAsync(string email)
