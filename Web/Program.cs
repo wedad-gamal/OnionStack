@@ -12,6 +12,7 @@ public class Program
         builder.Services.AddPresentationServices(builder.Configuration);
         builder.Services.AddApplicationServices();
         builder.Services.AddInfrastructureServices(builder.Configuration);
+        builder.Configuration.AddUserSecrets<Program>();
 
         var app = builder.Build();
 

@@ -8,6 +8,7 @@ public static class PresentationServiceRegistration
 {
     public static IServiceCollection AddPresentationServices(this IServiceCollection services, IConfiguration config)
     {
+
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
         {
@@ -62,6 +63,7 @@ public static class PresentationServiceRegistration
                 .WriteTo.Seq("http://localhost:5341") // seq
 
                 .CreateLogger();
+
         return services;
     }
 }
