@@ -9,6 +9,7 @@ global using FluentValidation.AspNetCore;
 global using Hangfire;
 global using Infrastructure.BinderModule;
 global using Infrastructure.Services.Logging;
+global using Microsoft.AspNetCore.Authentication.Google;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Abstractions;
 global using Microsoft.AspNetCore.Mvc.Routing;

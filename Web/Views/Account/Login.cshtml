@@ -23,6 +23,8 @@
         <div class="footer-link">
             Don't have an account? <a asp-action="Register">Register</a>
             <a asp-action="ForgetPassword">Forgot Password?</a>
+            <a asp-controller="Account" asp-action="ExternalLogin" asp-route-provider="Google">Sign in with Google</a>
+
         </div>
     </form>
 </div>

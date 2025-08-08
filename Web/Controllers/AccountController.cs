@@ -1,4 +1,8 @@
-﻿namespace Web.Controllers
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+
+namespace Web.Controllers
 {
     public class AccountController : Controller
     {
@@ -29,8 +33,10 @@
             return RedirectToAction(nameof(Login));
         }
 
-        public IActionResult Login()
+        [HttpGet]
+        public IActionResult Login(string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View(new LoginDto());
         }
 
@@ -86,6 +92,71 @@
             {
                 ModelState.AddModelError("", "Failed to reset password.");
                 return View(model);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult ExternalLogin(string provider, string returnUrl = "null")
+        {
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+            var properties = _accountService.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            //var properties = new AuthenticationProperties
+            //{
+            //    RedirectUri = Url.Action("ExternalLoginCallback"),
+            //    Items =
+            //    {
+            //        { "LoginProvider", provider },
+            //        { "ReturnUrl", returnUrl }
+            //    }
+            //};
+            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+        }
+
+        public async Task<IActionResult> LoginWithGoogle()
+        {
+            //login with google
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            if (result.Succeeded)
+            {
+                var claims = result.Principal.Claims.Select(c => new Claim(c.Type, c.Value)).ToList();
+                var identity = new ClaimsIdentity(claims, "Google");
+                var principal = new ClaimsPrincipal(identity);
+                // Sign in the user with the claims
+                var info = await _accountService.GetExternalLoginInfoAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Login");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            var info = await _accountService.GetExternalLoginInfoAsync();
+            if (info == null)
+                return RedirectToAction(nameof(Login));
+
+            var result = await _accountService.HandleExternalLoginAsync(info);
+
+            if (result.Succeeded)
+                return string.IsNullOrWhiteSpace(returnUrl) ? RedirectToLocal(returnUrl) : RedirectToAction("Index", "Home");
+
+            return RedirectToAction(nameof(Login), new { ReturnUrl = returnUrl });
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
             }
         }
         private async Task<IActionResult> HandleResult(IdentityResultDto result, IModelDto model, string actionName = "operation")

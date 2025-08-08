@@ -1,9 +1,36 @@
-﻿namespace Web.BinderModule;
+﻿
+
+using Microsoft.AspNetCore.Authentication.Cookies;
+
+namespace Web.BinderModule;
 
 public static class PresentationServiceRegistration
 {
-    public static IServiceCollection AddPresentationServices(this IServiceCollection services)
+    public static IServiceCollection AddPresentationServices(this IServiceCollection services, IConfiguration config)
     {
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(options =>
+        {
+            options.LoginPath = "/Account/Login";
+            options.ExpireTimeSpan = TimeSpan.FromDays(3); // Set the cookie expiration time
+            options.AccessDeniedPath = "/Account/AccessDenied";
+        })
+        .AddGoogle(googleOptions =>
+        {
+            IConfiguration configuration = config.GetSection("Authentication:Google");
+            if (configuration == null)
+            {
+                throw new ArgumentNullException(nameof(configuration), "Google authentication configuration is missing.");
+            }
+            if (string.IsNullOrEmpty(configuration["ClientId"]) || string.IsNullOrEmpty(configuration["ClientSecret"]))
+            {
+                throw new ArgumentException("Google ClientId and ClientSecret must be provided in the configuration.");
+            }
+
+            googleOptions.ClientId = configuration["ClientId"];
+            googleOptions.ClientSecret = configuration["ClientSecret"];
+        });
+
         services.AddHttpContextAccessor();
         services.AddControllersWithViews();
         services.AddScoped<LoggingFilter, LoggingFilter>();
