@@ -7,11 +7,14 @@ namespace Web.Controllers
     public class AccountController : Controller
     {
         private readonly ILoggerManager _loggerManager;
+        private readonly ISmsService _smsService;
         private readonly IAccountService _accountService;
 
-        public AccountController(ILoggerManager loggerManager, IAccountService accountService)
+        public AccountController(ILoggerManager loggerManager, ISmsService smsService,
+            IAccountService accountService)
         {
             _loggerManager = loggerManager;
+            _smsService = smsService;
             _accountService = accountService;
         }
 
@@ -100,28 +103,17 @@ namespace Web.Controllers
         {
             var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
             var properties = _accountService.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-            //var properties = new AuthenticationProperties
-            //{
-            //    RedirectUri = Url.Action("ExternalLoginCallback"),
-            //    Items =
-            //    {
-            //        { "LoginProvider", provider },
-            //        { "ReturnUrl", returnUrl }
-            //    }
-            //};
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
         public async Task<IActionResult> LoginWithGoogle()
         {
-            //login with google
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
             if (result.Succeeded)
             {
                 var claims = result.Principal.Claims.Select(c => new Claim(c.Type, c.Value)).ToList();
                 var identity = new ClaimsIdentity(claims, "Google");
                 var principal = new ClaimsPrincipal(identity);
-                // Sign in the user with the claims
                 var info = await _accountService.GetExternalLoginInfoAsync();
                 return RedirectToAction("Index", "Home");
             }
@@ -135,6 +127,12 @@ namespace Web.Controllers
             if (info == null)
                 return RedirectToAction(nameof(Login));
 
+
+            _loggerManager.Info("External login attempt: {Provider} | {ProviderKey} | {CorrelationId}",
+            info.LoginProvider,
+            info.ProviderKey,
+            Activity.Current?.Id ?? HttpContext.TraceIdentifier);
+
             var result = await _accountService.HandleExternalLoginAsync(info);
 
             if (result.Succeeded)
@@ -143,6 +141,13 @@ namespace Web.Controllers
             return RedirectToAction(nameof(Login), new { ReturnUrl = returnUrl });
         }
 
+
+        [HttpPost("SendSms")]
+        public async Task<IActionResult> Send([FromBody] MessageDto dto)
+        {
+            await _smsService.SendMessageAsync(dto);
+            return Ok("Message sent successfully");
+        }
         private IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))

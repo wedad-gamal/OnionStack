@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Core.Entities
+﻿namespace Infrastructure.Configurations
 {
-    [NotMapped]
     public class EmailSettings
     {
         public string SenderName { get; set; } = string.Empty;

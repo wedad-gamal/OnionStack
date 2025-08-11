@@ -1,4 +1,4 @@
-﻿using MailKit.Security;
+﻿
 
 namespace Infrastructure.Services
 {

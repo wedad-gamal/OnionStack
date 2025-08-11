@@ -1,4 +1,4 @@
-﻿using Core.Entities;
+﻿
 
 namespace Tests.Unit.Infrastructure.Email
 {

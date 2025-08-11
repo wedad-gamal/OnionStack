@@ -1,6 +1,4 @@
-﻿
-
-namespace Infrastructure.BinderModule
+﻿namespace Infrastructure.BinderModule
 {
     public static class InfrastructureServiceRegistration
     {
@@ -45,6 +43,10 @@ namespace Infrastructure.BinderModule
             //// 📬 MailKit setup
             services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
             services.AddScoped<IEmailService, EmailService>();
+
+            // Bind Twilio settings
+            services.Configure<TwilioSettings>(config.GetSection("TwilioSettings"));
+            services.AddTransient<ISmsService, WhatsAppService>();
 
             //// 🧵 Hangfire setup
             services.AddHangfire(x => x.UseSqlServerStorage(config.GetConnectionString("DefaultConnection")));
