@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Services
+﻿using Application.Common.Interfaces.Services;
+
+namespace Infrastructure.Services
 {
     public class WhatsAppService : ISmsService
     {

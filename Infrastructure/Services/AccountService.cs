@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Application.Common.Interfaces.Identity;
+using Application.Common.Interfaces.Logging;
+using Application.Common.Interfaces.Services;
+using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 
 namespace Infrastructure.Services

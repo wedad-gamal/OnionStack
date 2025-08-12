@@ -1,4 +1,5 @@
-﻿using Infrastructure.Persistence.Context;
+﻿using Application.Common.Interfaces.Repositories;
+using Infrastructure.Persistence.Context;
 using System.Collections.Concurrent;
 
 namespace Infrastructure.Persistence.Repositories

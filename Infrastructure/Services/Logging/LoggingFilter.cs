@@ -1,6 +1,4 @@
-﻿using Application.Abstractions.Logging;
-using Microsoft.AspNetCore.Mvc.Filters;
-using System.Diagnostics;
+﻿
 
 namespace Infrastructure.Services.Logging
 {

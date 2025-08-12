@@ -1,4 +1,8 @@
-﻿namespace Infrastructure.Services
+﻿using Application.Common.Interfaces.Identity;
+using Application.Common.Interfaces.Logging;
+using Application.Common.Interfaces.Services;
+
+namespace Infrastructure.Services
 {
     public class RoleService : IRoleService
     {

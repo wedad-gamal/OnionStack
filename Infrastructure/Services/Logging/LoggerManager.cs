@@ -2,34 +2,30 @@
 {
     public class LoggerManager : ILoggerManager
     {
-        private readonly ILogger _logger;
-        private readonly ICorrelationIdAccessor _correlation;
+        private readonly ICorrelationContextAccessor _correlation;
+        private readonly ILogger<LoggerManager> _logger;
 
-        public LoggerManager(ICorrelationIdAccessor correlationId)
+        public LoggerManager(ICorrelationContextAccessor correlation, ILogger<LoggerManager> logger)
         {
-            //_logger = Log.ForContext("SourceContext", "Application");
-            _correlation = correlationId;
-            _logger = new LoggerConfiguration()
-                           .Enrich.FromLogContext()
-                           .WriteTo.Console()
-                           .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
-                           .CreateLogger();
+            _correlation = correlation;
+            _logger = logger;
         }
-        public void Info(string message, params object[] args)
-        {
-            var correlationId = Guid.NewGuid().ToString();
-            correlationId = _correlation.GetCorrelationId();
 
-            _logger.ForContext("CorrelationId", correlationId).Information(message, args);
-        }
+        private string CorrelationId => _correlation.CorrelationContext?.CorrelationId ?? "N/A";
+
+        private object[] PrependCorrelation(object[] args) =>
+            new object[] { CorrelationId }.Concat(args ?? new object[0]).ToArray();
+
+        public void Info(string message, params object[] args) =>
+            _logger.LogInformation("[{CorrelationId}] " + message, PrependCorrelation(args));
 
         public void Warn(string message, params object[] args) =>
-            _logger.Warning(message, args);
+            _logger.LogWarning("[{CorrelationId}] " + message, PrependCorrelation(args));
 
         public void Error(string message, params object[] args) =>
-            _logger.Error(message, args);
+            _logger.LogError("[{CorrelationId}] " + message, PrependCorrelation(args));
 
         public void Debug(string message, params object[] args) =>
-            _logger.Debug(message, args);
+            _logger.LogDebug("[{CorrelationId}] " + message, PrependCorrelation(args));
     }
 }

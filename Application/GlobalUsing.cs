@@ -1,7 +1,5 @@
 ﻿global using Application.Commands;
 global using Application.DTOs;
-global using Core.Entities;
-global using Core.Interfaces;
 global using FluentValidation;
 global using MediatR;
 global using Microsoft.AspNetCore.Authentication;

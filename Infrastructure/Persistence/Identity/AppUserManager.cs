@@ -1,4 +1,6 @@
-﻿using Infrastructure.Extensions;
+﻿using Application.Common.Interfaces.Identity;
+using Application.Common.Interfaces.Logging;
+using Infrastructure.Extensions;
 
 namespace Infrastructure.Persistence.Identity
 {

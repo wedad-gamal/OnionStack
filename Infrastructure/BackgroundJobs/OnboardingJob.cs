@@ -1,4 +1,8 @@
-﻿namespace Infrastructure.BackgroundJobs
+﻿using Application.Common.Interfaces.Background;
+using Application.Common.Interfaces.Repositories;
+using Application.Common.Interfaces.Services;
+
+namespace Infrastructure.BackgroundJobs
 {
     public class OnboardingJob : IOnboardingJob
     {
@@ -20,22 +24,22 @@
             var correlationId = Guid.NewGuid().ToString();
             correlationId = _correlation.GetCorrelationId() ?? correlationId;
 
-            using (LogContext.PushProperty("CorrelationId", correlationId))
-            {
-                _logger.Info("Starting onboarding for employee {EmployeeId}", employeeId);
+            //using (LogContext.PushProperty("CorrelationId", correlationId))
+            //{
+            //    _logger.Info("Starting onboarding for employee {EmployeeId}", employeeId);
 
-                //var employee = await _repo.GetByIdAsync(employeeId);
-                //var employee = new Employee() { Id = 1, FirstName = "wedad", LastName = "gamal", Email = "wedad.gamal@gmail.com" };
-                //if (employee == null)
-                //{
-                //    _logger.Warn("Employee with ID {EmployeeId} not found", employeeId);
-                //    throw new Exception();
-                //}
+            //var employee = await _repo.GetByIdAsync(employeeId);
+            //var employee = new Employee() { Id = 1, FirstName = "wedad", LastName = "gamal", Email = "wedad.gamal@gmail.com" };
+            //if (employee == null)
+            //{
+            //    _logger.Warn("Employee with ID {EmployeeId} not found", employeeId);
+            //    throw new Exception();
+            //}
 
-                //await _emailSender.SendEmailAsync(employee.Email, "Welcome!", "...");
-                //_logger.Info("Welcome email sent to {Email}", employee.Email);
+            //await _emailSender.SendEmailAsync(employee.Email, "Welcome!", "...");
+            //_logger.Info("Welcome email sent to {Email}", employee.Email);
 
-            }
+            //}
 
         }
     }

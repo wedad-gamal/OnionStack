@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Application.Common.Interfaces.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Services
 {

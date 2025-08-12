@@ -1,4 +1,9 @@
-﻿namespace Infrastructure.BinderModule
+﻿using Application.Common.Interfaces.Background;
+using Application.Common.Interfaces.Identity;
+using Application.Common.Interfaces.Repositories;
+using Application.Common.Interfaces.Services;
+
+namespace Infrastructure.BinderModule
 {
     public static class InfrastructureServiceRegistration
     {
@@ -19,26 +24,29 @@
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
+            MapsterConfig.RegisterMappings();
+            services.AddMapster();
+
             var configInstance = TypeAdapterConfig.GlobalSettings;
             configInstance.Scan(typeof(AssemblyMarker).Assembly);
             services.AddSingleton(configInstance);
+            //
 
             services.AddHttpContextAccessor();
             services.AddScoped<ICorrelationIdAccessor, CorrelationIdAccessor>();
 
-            services.AddScoped<ILoggerManager, LoggerManager>();
+
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IAppUserManager, AppUserManager>();
-            services.AddScoped<ILoggerManager, LoggerManager>();
+
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<INotificationService, NotificationService>();
-
 
             //// 📬 MailKit setup
             services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
@@ -47,6 +55,8 @@
             // Bind Twilio settings
             services.Configure<TwilioSettings>(config.GetSection("TwilioSettings"));
             services.AddTransient<ISmsService, WhatsAppService>();
+            //services.AddKeyedScoped<ISmsService, Services.WhatsAppService>("whatsapp");
+            //services.AddKeyedScoped<ISmsService, Services.SmsService>("sms");
 
             //// 🧵 Hangfire setup
             services.AddHangfire(x => x.UseSqlServerStorage(config.GetConnectionString("DefaultConnection")));

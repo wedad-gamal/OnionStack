@@ -1,0 +1,37 @@
+﻿@model LoginDto
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<!-- Login Card -->
+<div class="auth-card">
+    <h2>Login</h2>
+    <form asp-action="Login">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <button type="submit">Login</button>
+        <div class="footer-link">
+            Don't have an account? <a asp-action="Register">Register</a>
+            <a asp-action="ForgetPassword">Forgot Password?</a>
+            <a asp-controller="Account" asp-action="ExternalLogin" asp-route-provider="Google">Sign in with Google</a>
+
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

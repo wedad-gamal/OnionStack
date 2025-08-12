@@ -1,5 +1,8 @@
 ﻿
 
+using Application.Common.Interfaces.Background;
+using Application.Common.Interfaces.Services;
+
 namespace Infrastructure.Services
 {
     public class EmployeeService : IEmployeeService

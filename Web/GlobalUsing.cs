@@ -1,9 +1,7 @@
 ﻿global using Application.Abstractions;
-global using Application.Abstractions.Services;
 global using Application.BinderModule;
 global using Application.Common.Models;
 global using Application.DTOs;
-global using Core.Interfaces;
 global using FluentValidation;
 global using FluentValidation.AspNetCore;
 global using Hangfire;

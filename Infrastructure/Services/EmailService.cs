@@ -1,4 +1,5 @@
-﻿
+﻿using Application.Common.Interfaces.Logging;
+using Application.Common.Interfaces.Services;
 
 namespace Infrastructure.Services
 {

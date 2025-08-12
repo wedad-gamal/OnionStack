@@ -1,5 +1,4 @@
-﻿
-
+﻿using Application.Common.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Web.BinderModule;

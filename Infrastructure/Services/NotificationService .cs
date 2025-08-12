@@ -1,4 +1,4 @@
-﻿using Infrastructure.RealTime;
+﻿using Application.Common.Interfaces.Services;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Infrastructure.Services

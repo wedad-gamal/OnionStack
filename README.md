@@ -53,6 +53,9 @@ OnionStack/
 - xUnit (for testing)
 
 ---
+## 🚧 Frontend Dashboard (Coming Soon)
+
+A Bootstrap-powered onboarding dashboard is in development, featuring modular JavaScript, jQuery integration, and seamless API connectivity. This will provide a visual interface for HR workflows and demonstrate full-stack capability.
 
 ## 🧪 Tests
 

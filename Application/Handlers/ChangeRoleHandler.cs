@@ -1,6 +1,4 @@
-﻿
-
-using Application.Abstractions.Services;
+﻿using Application.Common.Interfaces.Services;
 
 namespace Application.Handlers
 {

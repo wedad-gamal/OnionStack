@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Persistence.Identity
+﻿using Application.Common.Interfaces.Identity;
+
+namespace Infrastructure.Persistence.Identity
 {
     public class ApplicationUser : IdentityUser, IApplicationUser
     {
