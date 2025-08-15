@@ -1,7 +1,5 @@
-﻿using Application.Common.Interfaces.Background;
-using Application.Common.Interfaces.Identity;
+﻿using Application.Common.Interfaces.Identity;
 using Application.Common.Interfaces.Repositories;
-using Application.Common.Interfaces.Services;
 
 namespace Infrastructure.BinderModule
 {
@@ -59,12 +57,17 @@ namespace Infrastructure.BinderModule
             //services.AddKeyedScoped<ISmsService, Services.SmsService>("sms");
 
             //// 🧵 Hangfire setup
-            services.AddHangfire(x => x.UseSqlServerStorage(config.GetConnectionString("DefaultConnection")));
+            services.AddHangfire(x => x.UseSqlServerStorage(config.GetConnectionString("HangfireConnection")));
             services.AddHangfireServer();
 
-            services.AddScoped<IOnboardingJob, OnboardingJob>();
-            //services.AddScoped<IEmailJob, EmailJob>();
 
+
+            // Register background job service
+            services.AddScoped<IHangfireClient, HangfireClient>();
+            services.AddScoped<IBackgroundJobService, BackgroundJobService>();
+            // Register jobs
+            services.AddScoped<IEmailJob, EmailJob>();
+            services.AddScoped<IOnboardingJob, OnboardingJob>();
             return services;
         }
     }

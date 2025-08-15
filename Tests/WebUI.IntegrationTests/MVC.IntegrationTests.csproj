@@ -29,4 +29,8 @@
     <Folder Include="EndToEnd\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Presentation\MVC\MVC.csproj" />
+  </ItemGroup>
+
 </Project>

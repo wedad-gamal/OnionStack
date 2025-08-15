@@ -27,10 +27,11 @@ public class Program
         }
         // Use Correlation ID middleware early in pipeline
         app.UseCorrelationId();
+        app.UseSerilogRequestLogging();
         app.MapHub<NotificationHub>("/notificationHub");
 
         app.UseMiddleware<ExceptionMiddleware>();
-        app.UseHangfireDashboard();
+        app.UseHangfireDashboard("/hangfire");
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();

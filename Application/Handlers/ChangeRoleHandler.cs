@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.Services;
+﻿using Application.Common.Interfaces.Background;
+using Application.Common.Interfaces.Services;
 
 namespace Application.Handlers
 {
@@ -6,11 +7,14 @@ namespace Application.Handlers
     {
         private readonly IRoleService _roleService;
         private readonly INotificationService _notificationService;
+        private readonly IBackgroundJobService _backgroundJobService;
 
-        public ChangeRoleHandler(IRoleService roleService, INotificationService notificationService)
+        public ChangeRoleHandler(IRoleService roleService, INotificationService notificationService,
+            IBackgroundJobService backgroundJobService)
         {
             _roleService = roleService;
             _notificationService = notificationService;
+            _backgroundJobService = backgroundJobService;
         }
 
         public async Task<bool> Handle(ChangeRoleCommand request, CancellationToken cancellationToken)
@@ -20,10 +24,15 @@ namespace Application.Handlers
             {
                 if (user.Succeed.HasValue && user.Succeed.Value)
                 {
-                    foreach (var userId in request.Users)
-                    {
-                        await _notificationService.NotifyUserAsync(user.UserId, $"Your role has been changed to {request.RoleName}");
-                    }
+
+                    await _notificationService.NotifyUserAsync(user.UserId, $"Your role has been changed to {request.RoleName}");
+
+                    // Schedule email job
+                    _backgroundJobService.EnqueueSendRoleChangedEmail(
+                        user.UserId,
+                        request.RoleName,
+                        user.IsAssigned
+                    );
                 }
             }
 

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Common.Interfaces.Background
+namespace Application.UnitTests.Background
 {
-    interface IAccountBackgroundJob
+    class HangfireClientTests
     {
     }
 }

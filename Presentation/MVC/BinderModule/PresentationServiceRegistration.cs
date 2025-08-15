@@ -15,6 +15,7 @@ public static class PresentationServiceRegistration
             options.RequestHeader = "X-Correlation-ID";
             options.ResponseHeader = "X-Correlation-ID";
             options.UpdateTraceIdentifier = true;
+            options.IncludeInResponse = true;
         });
         Log.Logger = new LoggerConfiguration()
                .Enrich.FromLogContext()
@@ -24,9 +25,12 @@ public static class PresentationServiceRegistration
                .MinimumLevel.Debug()
                .WriteTo.Console()
                .Enrich.WithCorrelationIdHeader("X-Correlation-ID") // or your preferred header
-               .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day,
-                   outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] ({CorrelationId}) {Message:lj}{NewLine}{Exception}")
-               .WriteTo.Seq("http://localhost:5341") // seq
+               .WriteTo.Console(
+                    outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [CID:{CorrelationId}] {Message:lj}{NewLine}{Exception}")
+                .WriteTo.File("Logs/log-.txt",
+                    rollingInterval: RollingInterval.Day,
+                    outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [CID:{CorrelationId}] {Message:lj}{NewLine}{Exception}")
+                .WriteTo.Seq("http://localhost:5341") // seq
                .CreateLogger();
 
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -52,17 +56,8 @@ public static class PresentationServiceRegistration
             googleOptions.ClientSecret = configuration["ClientSecret"];
         });
 
-        services.AddScoped<ILoggerManager, LoggerManager>();
-        services.AddHttpContextAccessor();
-        services.AddControllersWithViews();
-        services.AddScoped<LoggingFilter, LoggingFilter>();
-        services.Configure<MvcOptions>(options =>
-        {
-            options.Filters.Add(typeof(LoggingFilter));
-        });
-
         services.AddHttpContextAccessor(); // Needed for IHttpContextAccessor
-
+        services.AddScoped<ILoggerManager, LoggerManager>();
         services.AddScoped<IUrlGenerator, UrlGenerator>();
 
         //fluent validators
@@ -70,6 +65,7 @@ public static class PresentationServiceRegistration
         services.AddFluentValidationAutoValidation(); // enables model validation
         services.AddFluentValidationClientsideAdapters(); // optional for client-side
 
+        services.AddControllersWithViews();
 
         return services;
     }

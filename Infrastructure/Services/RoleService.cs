@@ -1,6 +1,4 @@
 ﻿using Application.Common.Interfaces.Identity;
-using Application.Common.Interfaces.Logging;
-using Application.Common.Interfaces.Services;
 
 namespace Infrastructure.Services
 {
@@ -145,10 +143,12 @@ namespace Infrastructure.Services
         {
             _logger.Info("Adding/removing users for role: {RoleName}", roleName);
             List<UserRoleResultDto> userRoleResults = new List<UserRoleResultDto>();
+            bool isRoleChanged = false;
             try
             {
                 foreach (var userDto in users)
                 {
+                    isRoleChanged = false;
                     var user = await _userManager.GetUserByIdAsync(userDto.UserId);
                     if (user == null)
                     {
@@ -162,10 +162,12 @@ namespace Infrastructure.Services
                     if (isInRole && !userDto.IsAssigned)
                     {
                         result = await _userManager.RemoveRoleFromUserAsync(user, roleName);
+                        isRoleChanged = true;
                     }
                     else if (!isInRole && userDto.IsAssigned)
                     {
                         result = await _userManager.AssignRoleToUserAsync(user, roleName);
+                        isRoleChanged = true;
                     }
 
                     if (result != null && !result.Succeeded)
@@ -174,15 +176,16 @@ namespace Infrastructure.Services
                             _logger.Error("Error changing role for user {UserId}: {Error}",
                                 null, user.Id, error);
                     }
-
-                    userRoleResults.Add(new UserRoleResultDto
-                    {
-                        UserId = user.Id,
-                        RoleName = roleName,
-                        UserName = user.UserName,
-                        IsAssigned = userDto.IsAssigned,
-                        Succeed = result?.Succeeded
-                    });
+                    if (isRoleChanged)
+                        userRoleResults.Add(new UserRoleResultDto
+                        {
+                            Email = user.Email,
+                            UserId = user.Id,
+                            RoleName = roleName,
+                            UserName = user.UserName,
+                            IsAssigned = userDto.IsAssigned,
+                            Succeed = result?.Succeeded
+                        });
                 }
             }
             catch (Exception ex)
