@@ -1,0 +1,24 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+
+    <li class="nav-item ms-auto">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+    </li>
+    <li class="nav-item ms-auto">
+        @{
+            var user = User.Identity.Name.Remove(User.Identity.Name.IndexOf('@') > 0 ? User.Identity.Name.IndexOf('@') : User.Identity.Name.Length);
+        }
+        <span>@user</span>
+
+    </li>
+}
+else
+{
+    <li class="nav-item ms-auto">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">SignUp</a>
+    </li>
+}

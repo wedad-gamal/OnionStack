@@ -1,5 +1,4 @@
-﻿global using Application.Abstractions;
-global using Application.Common.Interfaces.Background;
+﻿global using Application.Common.Interfaces.Background;
 global using Application.Common.Interfaces.Logging;
 global using Application.Common.Interfaces.Services;
 global using Application.DTOs;
@@ -16,7 +15,6 @@ global using Infrastructure.Persistence.Identity;
 global using Infrastructure.Persistence.Repositories;
 global using Infrastructure.RealTime;
 global using Infrastructure.Services;
-global using Infrastructure.Services.Logging;
 global using MailKit.Net.Smtp;
 global using MailKit.Security;
 global using Mapster;

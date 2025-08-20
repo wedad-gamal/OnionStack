@@ -1,5 +1,5 @@
 ﻿using Application.Common.Interfaces.Identity;
-using Application.Common.Interfaces.Logging;
+using Application.DTOs.Identity;
 using Infrastructure.Extensions;
 
 namespace Infrastructure.Persistence.Identity

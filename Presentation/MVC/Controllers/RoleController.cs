@@ -2,6 +2,7 @@
 using Application.Common.Interfaces.Identity;
 using Application.Common.Interfaces.Logging;
 using Application.Common.Interfaces.Services;
+using Application.DTOs.Identity;
 using MediatR;
 using Web.ViewModels;
 

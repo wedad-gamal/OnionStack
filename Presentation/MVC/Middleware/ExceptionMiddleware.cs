@@ -1,6 +1,4 @@
-﻿using Application.Common.Interfaces.Logging;
-
-namespace Web.Middleware;
+﻿namespace Web.Middleware;
 
 public class ExceptionMiddleware
 {

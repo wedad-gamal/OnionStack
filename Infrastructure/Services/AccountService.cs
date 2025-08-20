@@ -1,7 +1,5 @@
 ﻿using Application.Common.Interfaces.Identity;
-using Application.Common.Interfaces.Logging;
-using Application.Common.Interfaces.Services;
-using Microsoft.AspNetCore.Authentication;
+using Application.DTOs.Identity;
 using System.Security.Claims;
 
 namespace Infrastructure.Services
@@ -28,18 +26,17 @@ namespace Infrastructure.Services
         }
         public async Task<IdentityResultDto> ForgotPassword(string email, string action, string controller)
         {
-
             _loggerManager.Info("Attempting to send password reset email to: {Email}", email);
+
             var token = await _appUserManager.GeneratePasswordResetTokenAsync(email);
             var url = _urlGenerator.GenerateUrl(email, token, action, controller);
             await _emailService.SendEmailAsync(email, "Reset Password", url);
 
-            return new IdentityResultDto()
+            return new IdentityResultDto
             {
                 Succeeded = true,
-                Errors = new List<string>() { "Reset password email sent successfully" }
+                Errors = new List<string> { "Reset password email sent successfully" }
             };
-
         }
 
         public async Task<IdentityResultDto> LoginAsync(LoginDto loginDto)
@@ -54,7 +51,6 @@ namespace Infrastructure.Services
             await _signInManager.SignOutAsync();
         }
 
-
         public async Task<IdentityResultDto> RegisterAsync(CreateUserDto createUserDto)
         {
             _loggerManager.Info("Attempting to register user: {Email}", createUserDto.Email);
@@ -67,51 +63,56 @@ namespace Infrastructure.Services
             return await _appUserManager.ResetPasswordAsync(changePasswordDto.Email, changePasswordDto.Token, changePasswordDto.Password);
         }
 
-
-        public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string redirectUrl)
+        public AuthenticationPropertiesDto ConfigureExternalAuthenticationProperties(string provider, string redirectUrl)
         {
-            return _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            var props = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return props.Adapt<AuthenticationPropertiesDto>();
         }
 
-        public async Task<IdentityResult> CreateUserAsync(IApplicationUser user, string password = null)
+        public async Task<IdentityResultDto> CreateUserAsync(IApplicationUser user, string password = null)
         {
             var applicationUser = user as ApplicationUser;
-            return password == null
+            var result = password == null
                 ? await _userManager.CreateAsync(applicationUser)
                 : await _userManager.CreateAsync(applicationUser, password);
+
+            return result.Adapt<IdentityResultDto>();
         }
 
-        public async Task<IdentityResult> AddLoginAsync(IApplicationUser user, ExternalLoginInfo info)
+        public async Task<IdentityResultDto> AddLoginAsync(IApplicationUser user, ExternalLoginInfoDto infoDto)
         {
             var applicationUser = user as ApplicationUser;
-            return await _userManager.AddLoginAsync(applicationUser, info);
+            var info = infoDto.Adapt<ExternalLoginInfo>();
+            var result = await _userManager.AddLoginAsync(applicationUser, info);
+            return result.Adapt<IdentityResultDto>();
         }
 
         public async Task SignInAsync(IApplicationUser user, bool isPersistent)
         {
             var applicationUser = user as ApplicationUser;
             await _signInManager.SignInAsync(applicationUser, isPersistent);
-
-
         }
 
-        public async Task<SignInResult> ExternalLoginSignInAsync(string loginProvider, string providerKey, bool isPersistent = false)
+        public async Task<SignInResultDto> ExternalLoginSignInAsync(string loginProvider, string providerKey, bool isPersistent = false)
         {
-            return await _signInManager.ExternalLoginSignInAsync(loginProvider, providerKey, isPersistent);
+            var result = await _signInManager.ExternalLoginSignInAsync(loginProvider, providerKey, isPersistent);
+            return result.Adapt<SignInResultDto>();
         }
 
-        public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync(string expectedXsrf = null)
+        public async Task<ExternalLoginInfoDto> GetExternalLoginInfoAsync(string expectedXsrf = null)
         {
-            return await _signInManager.GetExternalLoginInfoAsync(expectedXsrf);
+            var info = await _signInManager.GetExternalLoginInfoAsync(expectedXsrf);
+            return info?.Adapt<ExternalLoginInfoDto>();
         }
 
-        public async Task<SignInResult> HandleExternalLoginAsync(ExternalLoginInfo info)
+        public async Task<SignInResultDto> HandleExternalLoginAsync(ExternalLoginInfoDto infoDto)
         {
+            var info = infoDto.Adapt<ExternalLoginInfo>();
 
             if (info == null)
             {
                 _loggerManager.Warn("External login info is null.");
-                return SignInResult.Failed;
+                return SignInResult.Failed.Adapt<SignInResultDto>();
             }
 
             var result = await _signInManager.ExternalLoginSignInAsync(
@@ -120,19 +121,18 @@ namespace Infrastructure.Services
             if (result.Succeeded)
             {
                 _loggerManager.Info("External login succeeded for provider {Provider}", info.LoginProvider);
-                return result;
+                return result.Adapt<SignInResultDto>();
             }
 
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            var firstName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
+            var firstName = info.Principal.FindFirstValue(ClaimTypes.Name);
             var lastName = info.Principal.FindFirstValue(ClaimTypes.Surname);
             var profilePicture = info.Principal.FindFirstValue("image") ?? "";
-
 
             if (string.IsNullOrEmpty(email))
             {
                 _loggerManager.Warn("Email claim not found in external login info.");
-                return SignInResult.Failed;
+                return SignInResult.Failed.Adapt<SignInResultDto>();
             }
 
             var user = await _userManager.FindByEmailAsync(email);
@@ -149,22 +149,24 @@ namespace Infrastructure.Services
                 var createResult = await _userManager.CreateAsync(user);
                 if (!createResult.Succeeded)
                 {
-                    _loggerManager.Error("User creation failed: {Errors}", string.Join(", ", createResult.Errors.Select(e => e.Description)));
-                    return SignInResult.Failed;
+                    _loggerManager.Error("User creation failed: {Errors}",
+                        string.Join(", ", createResult.Errors.Select(e => e.Description)));
+                    return SignInResult.Failed.Adapt<SignInResultDto>();
                 }
             }
 
             var addLoginResult = await _userManager.AddLoginAsync(user, info);
             if (!addLoginResult.Succeeded)
             {
-                _loggerManager.Error("Adding external login failed: {Errors}", string.Join(", ", addLoginResult.Errors.Select(e => e.Description)));
-                return SignInResult.Failed;
+                _loggerManager.Error("Adding external login failed: {Errors}",
+                    string.Join(", ", addLoginResult.Errors.Select(e => e.Description)));
+                return SignInResult.Failed.Adapt<SignInResultDto>();
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             _loggerManager.Info("User signed in after linking external login.");
-            return SignInResult.Success;
-        }
+            return SignInResult.Success.Adapt<SignInResultDto>();
 
+        }
     }
 }

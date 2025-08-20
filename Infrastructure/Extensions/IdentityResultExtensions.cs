@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Extensions
+﻿using Application.DTOs.Identity;
+
+namespace Infrastructure.Extensions
 {
     public static class IdentityResultExtensions
     {

@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces.Identity;
 using Application.Common.Interfaces.Logging;
+using Application.DTOs.Identity;
 
 namespace Web.Controllers
 {

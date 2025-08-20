@@ -1,8 +1,4 @@
-﻿using Application.Common.Interfaces.Logging;
-using Application.Common.Interfaces.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
+﻿
 
 namespace Web.Controllers
 {
@@ -105,7 +101,9 @@ namespace Web.Controllers
         {
             _loggerManager.Info("Login using external login provider: {provider}", provider);
             var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
-            var properties = _accountService.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            var propertiesDto = _accountService.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            var properties = propertiesDto.Adapt<AuthenticationProperties>();
+
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
@@ -140,7 +138,6 @@ namespace Web.Controllers
 
             if (result.Succeeded)
                 return string.IsNullOrWhiteSpace(returnUrl) ? RedirectToLocal(returnUrl) : RedirectToAction("Index", "Home");
-
             return RedirectToAction(nameof(Login), new { ReturnUrl = returnUrl });
         }
 

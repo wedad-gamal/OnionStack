@@ -25,11 +25,11 @@ namespace Application.Handlers
                 if (user.Succeed.HasValue && user.Succeed.Value)
                 {
 
-                    await _notificationService.NotifyUserAsync(user.UserId, $"Your role has been changed to {request.RoleName}");
+                    await _notificationService.NotifyUserAsync(user.Email, $"Your role has been changed to {request.RoleName}");
 
                     // Schedule email job
                     _backgroundJobService.EnqueueSendRoleChangedEmail(
-                        user.UserId,
+                        user.Email,
                         request.RoleName,
                         user.IsAssigned
                     );

@@ -1,0 +1,11 @@
+﻿global using Application.Common.Interfaces.Identity;
+global using Application.Common.Interfaces.Logging;
+global using Application.Common.Interfaces.Services;
+global using Application.DTOs;
+global using Application.DTOs.Identity;
+global using FluentAssertions;
+global using Infrastructure.Persistence.Identity;
+global using Infrastructure.Services;
+global using Microsoft.AspNetCore.Authentication;
+global using Microsoft.AspNetCore.Identity;
+global using Moq;
