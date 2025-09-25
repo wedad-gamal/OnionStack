@@ -1,19 +1,16 @@
-﻿using Application.Common.Interfaces.Identity;
-using Application.DTOs.Identity;
-
-namespace Infrastructure.Services
+﻿namespace Infrastructure.Services
 {
     public class RoleService : IRoleService
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILoggerManager _logger;
-        private readonly IAppUserManager _userManager;
+        private readonly IAppUserService _userManager;
 
-        public RoleService(RoleManager<IdentityRole> roleManager, ILoggerManager logger, IAppUserManager userManager)
+        public RoleService(RoleManager<IdentityRole> roleManager, ILoggerManager logger, IAppUserService userService)
         {
             _roleManager = roleManager;
             _logger = logger;
-            _userManager = userManager;
+            _userManager = userService;
         }
 
         public async Task<IEnumerable<RoleDto>> GetAsync()
@@ -53,27 +50,33 @@ namespace Infrastructure.Services
             };
         }
 
-        public async Task<IdentityResultDto> CreateRoleAsync(string roleName)
+        public async Task<IdentityResultDto> CreateRoleAsync(RoleDto roleDto)
         {
-            _logger.Info("Attempting to create role: {RoleName}", roleName);
+            _logger.Info("Attempting to create role: {RoleName}", roleDto.Name);
 
-            if (string.IsNullOrWhiteSpace(roleName))
+
+            if (await _roleManager.RoleExistsAsync(roleDto.Name))
             {
-                return new IdentityResultDto
+                var identityResult = IdentityResult.Failed(new IdentityError
                 {
-                    Succeeded = false,
-                    Errors = new[] { "Role name cannot be empty." }
-                };
+                    Code = "DuplicateRole",
+                    Description = $"The role '{roleDto.Name}' already exists."
+                });
+                return identityResult.Adapt<IdentityResultDto>();
             }
-
-            var result = await _roleManager.CreateAsync(new IdentityRole(roleName));
+            var identityRole = new IdentityRole
+            {
+                Name = roleDto.Name
+            };
+            var result = await _roleManager.CreateAsync(identityRole);
 
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
-                    _logger.Warn("Failed to create role {RoleName}: {Error}", roleName, error.Description);
+                    _logger.Warn("Failed to create role {RoleName}: {Error}", roleDto.Name, error.Description);
             }
 
+            roleDto.Id = identityRole.Id;
             return new IdentityResultDto
             {
                 Succeeded = result.Succeeded,

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<RoleDto>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Roles Index</h1>
+<h6 id="successMessage" class="alert alert-success" style="display:none"></h6>
+<h6 id="errorMessage" class="alert alert-danger" style="display:none"></h6>
+<form id="addRoleForm">
+    @Html.AntiForgeryToken()
+
+    <div class="row my-3 offset-3">
+        <div class="col-md-6">
+            <input class="form-control" placeholder="Add Role Name..."
+                   type="text" name="roleName" id="roleName" required />
+            <div id="roleNameError" class="invalid-feedback">
+                Role name is required
+            </div>
+        </div>
+        <div class="col-md-6">
+            <button id="addRole" type="submit" class="btn btn-success">Add</button>
+        </div>
+    </div>
+
+</form>
+
+<div id="rolesTableContainer">
+    <partial name="_RolesTablePartialView" model="Model" />
+</div>
+
+
+<div id="editRoleModalContainer"></div>
+
+<div id="confirmDeleteRoleModalContainer"></div>

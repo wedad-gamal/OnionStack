@@ -1,14 +1,10 @@
-﻿using Application.Common.Interfaces.Repositories;
-using Infrastructure.Persistence.Context;
+﻿using Core.Common;
 
-namespace Infrastructure.Persistence.Repositories
+namespace Infrastructure.Persistence.Repositories;
+public class EmployeeRepository<TEntity, Tkey> : GenericRepository<TEntity, Tkey>, IEmployeeRepository<TEntity, Tkey>
+    where TEntity : BaseEntity<Tkey>
 {
-    public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
+    public EmployeeRepository(ApplicationDbContext context) : base(context)
     {
-        public EmployeeRepository(DataContext dataContext) : base(dataContext)
-        {
-        }
-
-
     }
 }

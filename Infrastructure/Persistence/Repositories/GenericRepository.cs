@@ -1,28 +1,26 @@
-﻿using Application.Common.Interfaces.Repositories;
-using Infrastructure.Persistence.Context;
+﻿
+using Core.Common;
 
 namespace Infrastructure.Persistence.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<TEntity, TId> : IGenericRepository<TEntity, TId>
+    where TEntity : BaseEntity<TId>
     {
-        protected readonly DataContext _dataContext;
-        protected DbSet<T> _dbSet;
-        public GenericRepository(DataContext dataContext)
+        private readonly ApplicationDbContext _context;
+        private readonly DbSet<TEntity> _dbSet;
+
+        public GenericRepository(ApplicationDbContext context)
         {
-            _dataContext = dataContext;
-            _dbSet = _dataContext.Set<T>();
+            _context = context;
+            _dbSet = _context.Set<TEntity>();
         }
 
-        public async Task AddAsync(T entity) => await _dbSet.AddAsync(entity);
+        public async Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken = default) => await _dbSet.FindAsync(id, cancellationToken);
+        public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default) => await _dbSet.ToListAsync(cancellationToken);
+        public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default) => await _dbSet.AddAsync(entity, cancellationToken);
+        public void Update(TEntity entity) => _dbSet.Update(entity);
+        public void Delete(TEntity entity) => _dbSet.Remove(entity);
 
-        public void Delete(T entity) => _dbSet.Remove(entity);
 
-        public async Task DeleteAsync(int id) => _dbSet.Remove(await _dbSet.FindAsync(id));
-
-        public async Task<T>? GetAsync(int id) => await _dbSet.FindAsync(id);
-
-        public async Task<IEnumerable<T>> GetAllAsync() => await _dbSet.AsNoTracking().ToListAsync();
-
-        public void Update(T entity) => _dbSet.Update(entity);
     }
 }

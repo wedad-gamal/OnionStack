@@ -1,0 +1,8 @@
+services:
+  mvc:
+    image: ${DOCKER_REGISTRY-}mvc
+    build:
+      context: .
+      dockerfile: Presentation/MVC/Dockerfile
+    ports:
+          - "8080:80" # Map host port 8080 to container port 80

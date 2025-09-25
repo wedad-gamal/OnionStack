@@ -1,6 +1,4 @@
-﻿using Application.DTOs.Identity;
-using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Authentication;
 
 namespace Infrastructure.Mapping
 {
@@ -33,37 +31,37 @@ namespace Infrastructure.Mapping
 
             config.NewConfig<SignInResultDto, SignInResult>()
                 .ConstructUsing(src =>
-                 src.Succeeded ? SignInResult.Success : src.IsLockedOut ? SignInResult.LockedOut
-                                : src.IsNotAllowed ? SignInResult.NotAllowed
-                                : src.RequiresTwoFactor ? SignInResult.TwoFactorRequired
-                                : SignInResult.Failed
-
+                    src.Succeeded ? SignInResult.Success :
+                    src.IsLockedOut ? SignInResult.LockedOut :
+                    src.IsNotAllowed ? SignInResult.NotAllowed :
+                    src.RequiresTwoFactor ? SignInResult.TwoFactorRequired :
+                    SignInResult.Failed
                 );
 
             // =============================
             // ExternalLoginInfo ↔ ExternalLoginInfoDto
             // =============================
             config.NewConfig<ExternalLoginInfo, ExternalLoginInfoDto>()
+                .Map(dest => dest.Principal, src => src.Principal)
                 .Map(dest => dest.LoginProvider, src => src.LoginProvider)
                 .Map(dest => dest.ProviderKey, src => src.ProviderKey)
                 .Map(dest => dest.ProviderDisplayName, src => src.ProviderDisplayName)
-                .Map(dest => dest.DisplayName, src => src.Principal.Identity != null ? src.Principal.Identity.Name : null);
+                .Map(dest => dest.DisplayName,
+                     src => src.Principal.Identity != null ? src.Principal.Identity.Name : null);
 
-
-
-            config
-                .NewConfig<ExternalLoginInfoDto, ExternalLoginInfo>()
+            config.NewConfig<ExternalLoginInfoDto, ExternalLoginInfo>()
                 .ConstructUsing(src =>
                     new ExternalLoginInfo(
-                        new ClaimsPrincipal(new ClaimsIdentity(
+                        src.Principal ?? new ClaimsPrincipal(new ClaimsIdentity(
                             !string.IsNullOrEmpty(src.DisplayName)
                                 ? new[] { new Claim(ClaimTypes.Name, src.DisplayName) }
-                                : Array.Empty<Claim>())),
+                                : Array.Empty<Claim>()
+                        )),
                         src.LoginProvider ?? string.Empty,
                         src.ProviderKey ?? string.Empty,
-                        src.ProviderDisplayName ?? src.DisplayName // fallback if ProviderDisplayName is null
+                        src.ProviderDisplayName ?? src.DisplayName
                     )
-            );
+                );
 
             // =============================
             // AuthenticationProperties ↔ AuthenticationPropertiesDto
@@ -85,6 +83,24 @@ namespace Infrastructure.Mapping
                     IsPersistent = src.IsPersistent,
                     RedirectUri = src.RedirectUri
                 });
+
+            config.NewConfig<CreateUserDto, ApplicationUser>()
+                .ConstructUsing(src => new ApplicationUser(src.UserName, new Email(src.Email)))
+                .Map(dest => dest.FirstName, src => src.FirstName)
+                .Map(dest => dest.LastName, src => src.LastName)
+                .Map(dest => dest.PhoneNumber, src => src.PhoneNumber)
+                .Map(dest => dest.ProfilePictureUrl, src => src.ProfilePictureUrl)
+                .Map(dest => dest.Age, src => src.Age);
+
+            config.NewConfig<ApplicationUser, UserDto>()
+                .Map(dest => dest.Id, src => src.Id)
+                .Map(dest => dest.UserName, src => src.UserName)
+                .Map(dest => dest.Email, src => src.EmailAddress.Value)
+                .Map(dest => dest.FirstName, src => src.FirstName)
+                .Map(dest => dest.LastName, src => src.LastName)
+                .Map(dest => dest.Age, src => src.Age)
+                .Map(dest => dest.PhoneNumber, src => src.PhoneNumber)
+                .Map(dest => dest.ProfilePictureUrl, src => src.ProfilePictureUrl);
         }
     }
 }

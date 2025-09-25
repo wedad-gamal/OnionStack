@@ -1,51 +1,152 @@
-﻿@{
+﻿@model IEnumerable<TransactionViewModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8 mx-auto text-center">
-            <h1 class="display-4 mb-4">Welcome to OnionStack</h1>
-            <p class="lead">A clean architecture template for ASP.NET Core applications</p>
-
-            <div class="card mt-5">
-                <div class="card-header bg-primary text-white">
-                    <h5>Dashboard</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="card text-white bg-success h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title">Modules</h5>
-                                    <p class="card-text">Easily pluggable components</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="card text-white bg-info h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title">Clean Code</h5>
-                                    <p class="card-text">Separation of concerns</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="card text-white bg-warning h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title">Scalable</h5>
-                                    <p class="card-text">Grows with your needs</p>
-                                </div>
-                            </div>
-                        </div>
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card-stat">
+            <div class="icon"><i class="bi bi-bag-check"></i></div>
+            <h5 class="fw-bold">75</h5>
+            <span class="text-muted">Total Order</span>
+            <div class="text-success small mt-2"><i class="bi bi-arrow-up"></i> +10.5% up</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-stat">
+            <div class="icon"><i class="bi bi-truck"></i></div>
+            <h5 class="fw-bold">357</h5>
+            <span class="text-muted">Total Delivered</span>
+            <div class="text-success small mt-2"><i class="bi bi-arrow-up"></i> +12.3% up</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-stat">
+            <div class="icon"><i class="bi bi-x-circle"></i></div>
+            <h5 class="fw-bold">65</h5>
+            <span class="text-muted">Total Canceled</span>
+            <div class="text-danger small mt-2"><i class="bi bi-arrow-down"></i> -2.1% down</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-stat">
+            <div class="icon"><i class="bi bi-cash-coin"></i></div>
+            <h5 class="fw-bold">$128</h5>
+            <span class="text-muted">Total Revenue</span>
+            <div class="text-success small mt-2"><i class="bi bi-arrow-up"></i> +8.7% up</div>
+        </div>
+    </div>
+</div>
+<!-- Charts Row -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="chart-card">
+            <h6 class="fw-bold mb-3">Pie Chart</h6>
+            <canvas id="pieChart" height="180"></canvas>
+            <div class="d-flex justify-content-between mt-3">
+                <span>81% Total Order</span>
+                <span>22% Customer Growth</span>
+                <span>62% Total Revenue</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="chart-card">
+            <h6 class="fw-bold mb-3">Chart Order</h6>
+            <canvas id="orderChart" height="180"></canvas>
+            <button class="btn btn-outline-primary btn-sm mt-3">Save Report</button>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="chart-card">
+            <h6 class="fw-bold mb-3">Customer Map</h6>
+            <select class="form-select form-select-sm mb-2" style="width:100px;">
+                <option>Weekly</option>
+                <option>Monthly</option>
+            </select>
+            <canvas id="customerMapChart" height="180"></canvas>
+        </div>
+    </div>
+</div>
+<!-- Revenue and Reviews -->
+<div class="row g-4 mb-4">
+    <div class="col-md-8">
+        <div class="chart-card">
+            <h6 class="fw-bold mb-3">Total Revenue</h6>
+            <canvas id="revenueChart" height="180"></canvas>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="chart-card">
+            <h6 class="fw-bold mb-3">Customer Review</h6>
+            <div class="customer-review d-flex align-items-center gap-3 mb-2">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="review-img" alt="Jons Sena">
+                <div>
+                    <strong>Jons Sena</strong>
+                    <div class="text-muted small">2 days ago</div>
+                    <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
+                    <div class="text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                        <span class="ms-2">4.5</span>
                     </div>
                 </div>
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=64&q=80" class="review-food" alt="Food">
+            </div>
+            <div class="customer-review d-flex align-items-center gap-3 mb-2">
+                <img src="https://randomuser.me/api/portraits/women/65.jpg" class="review-img" alt="Sofia">
+                <div>
+                    <strong>Sofia</strong>
+                    <div class="text-muted small">2 days ago</div>
+                    <div>Lorem Ipsum has been the industry's standard dummy text.</div>
+                    <div class="text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star"></i>
+                        <span class="ms-2">4.0</span>
+                    </div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=64&q=80" class="review-food" alt="Food">
+            </div>
+            <div class="customer-review d-flex align-items-center gap-3">
+                <img src="https://randomuser.me/api/portraits/men/43.jpg" class="review-img" alt="Anandreansyah">
+                <div>
+                    <strong>Anandreansyah</strong>
+                    <div class="text-muted small">2 days ago</div>
+                    <div>Lorem Ipsum has been the industry's standard dummy text.</div>
+                    <div class="text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                        <span class="ms-2">4.5</span>
+                    </div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0723c6a?auto=format&fit=crop&w=64&q=80" class="review-food" alt="Food">
             </div>
         </div>
     </div>
 </div>
 
+<div>
+    <partial name="_TestimonialPartial" />
+</div>
+
+<div>
+    @foreach (var item in Model)
+    {
+        <partial name="_TransactionsPartial" model="@item" />
+
+    }
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
 <script>
     const connection = new signalR.HubConnectionBuilder()

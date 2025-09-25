@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Core.Entities.Features;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Context.Configurations
 {
@@ -6,8 +7,9 @@ namespace Infrastructure.Persistence.Context.Configurations
     {
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
+            //builder.HasKey(e => e.UserId);
 
-            builder.Property(e => e.Salary).HasColumnType("decimal(18,2)");
+            //builder.Property(e => e.Salary).HasColumnType("decimal(18,2)");
         }
     }
 }

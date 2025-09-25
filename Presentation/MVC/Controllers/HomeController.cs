@@ -1,5 +1,4 @@
-using Application.Common.Interfaces.Logging;
-using Application.Common.Interfaces.Services;
+using MVC.ViewModels;
 
 namespace Web.Controllers;
 
@@ -7,26 +6,43 @@ public class HomeController : Controller
 {
 
     private readonly ILoggerManager _structuredLogger;
-    private readonly IEmployeeService _employeeService;
+    private readonly IServiceManager _serviceManager;
 
-    public HomeController(ILoggerManager structuredLogger, IEmployeeService employeeService)
+    public HomeController(ILoggerManager structuredLogger, IServiceManager serviceManager)
     {
 
         _structuredLogger = structuredLogger;
-        _employeeService = employeeService;
+        _serviceManager = serviceManager;
     }
 
     public IActionResult Index()
     {
-        _structuredLogger.Info("entered index page");
-        return View();
+        var transactions = new List<TransactionViewModel>()
+        {
+            new (){
+                Id = "88338",
+                Name = "trnx - 1",
+                CreatedDate = DateTime.Now,
+            },
+            new (){
+                Id = "89383",
+                Name = "trnx - 2",
+                CreatedDate = DateTime.Now,
+            },
+            new (){
+                Id = "89939383",
+                Name = "trnx - 3",
+                CreatedDate = DateTime.Now,
+            }
+        };
+        return View(transactions);
     }
 
     [HttpGet("boarding-job/{id:int}")]
     public IActionResult BoardingJob(int id)
     {
         _structuredLogger.Info("boarding job");
-        _employeeService.ScheduleOnboarding(id);
+        _serviceManager.EmployeeService.ScheduleOnboarding(id);
         return Ok("job is done");
     }
 
@@ -42,5 +58,14 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+    public IActionResult testimonial()
+    {
+        return PartialView("_TestimonialPartial");
+    }
+    public IActionResult Transactions()
+    {
+
+        return PartialView("_TransactionsPartial");
     }
 }

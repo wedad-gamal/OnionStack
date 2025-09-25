@@ -1,20 +1,16 @@
-﻿using Application.Common.Interfaces.Background;
-using Application.Common.Interfaces.Repositories;
-using Application.Common.Interfaces.Services;
-
-namespace Infrastructure.BackgroundJobs
+﻿namespace Infrastructure.BackgroundJobs
 {
     public class OnboardingJob : IOnboardingJob
     {
         private readonly IEmailService _emailSender;
-        private readonly IEmployeeRepository _repo;
+        private readonly IUnitOfWork _unitofwork;
         private readonly ILoggerManager _logger;
         private readonly ICorrelationIdAccessor _correlation;
 
-        public OnboardingJob(IEmailService emailSender, IEmployeeRepository repo, ILoggerManager logger, ICorrelationIdAccessor correlation)
+        public OnboardingJob(IEmailService emailSender, IUnitOfWork repo, ILoggerManager logger, ICorrelationIdAccessor correlation)
         {
             _emailSender = emailSender;
-            _repo = repo;
+            _unitofwork = repo;
             _logger = logger;
             _correlation = correlation;
         }

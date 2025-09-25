@@ -1,4 +1,20 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function ToastSuccess(message) {
+    $.toast({
+        heading: 'Success',
+        text: message,
+        showHideTransition: 'slide',
+        icon: 'success',
+        position: 'bottom-right'
+    });
+}
 
-// Write your JavaScript code.
+function ToastError(message) {
+    $.toast({
+        heading: 'Error',
+        text: message,
+        showHideTransition: 'fade',
+        icon: 'error',
+        position: 'bottom-right'
+    });
+}
+

@@ -1,55 +1,95 @@
-/* Custom variables */
-:root {
-    --primary-color: #4e73df;
-    --secondary-color: #858796;
-    --success-color: #1cc88a;
-    --info-color: #36b9cc;
-    --warning-color: #f6c23e;
-    --danger-color: #e74a3b;
-    --light-color: #f8f9fc;
-    --dark-color: #5a5c69;
-}
-
-/* Global styles */
 body {
-    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f8f9fc;
+    background: #f6f7fb;
+    font-family: 'Segoe UI', Arial, sans-serif;
 }
 
-/* Navbar customization */
-.navbar {
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+.sidebar {
+    background: #fff;
+    min-height: 100vh;
+    border-radius: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
-/* Card customization */
-.card {
-    border: none;
-    border-radius: 0.35rem;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
-}
-
-.card-header {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-/* Form controls */
-.form-control:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
-}
-
-/* Buttons */
-.btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-    .btn-primary:hover {
-        background-color: #2e59d9;
-        border-color: #2653d4;
+    .sidebar .nav-link.active {
+        background: #eaf6f0;
+        color: #3bb77e;
+        border-radius: 12px;
     }
 
-/* Utility classes */
-.shadow-sm {
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    .sidebar .nav-link {
+        color: #6c757d;
+        margin-bottom: 8px;
+    }
+
+.dashboard-header {
+    background: #fff;
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.card-stat {
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    background: #fff;
+    padding: 24px;
+    text-align: center;
+}
+
+    .card-stat .icon {
+        font-size: 2rem;
+        color: #3bb77e;
+        margin-bottom: 8px;
+    }
+
+.chart-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.customer-review {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.review-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.review-food {
+    width: 64px;
+    height: 48px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.btn-green {
+    background: #3bb77e;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.sidebar-footer {
+    background: #eaf6f0;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 24px;
+    text-align: center;
+}
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
 }

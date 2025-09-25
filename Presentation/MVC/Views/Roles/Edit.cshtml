@@ -1,0 +1,102 @@
+﻿@model RoleDto
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Role @Model.Name</h1>
+
+
+<form>
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="All" class="alert-danger"></div>
+    <input type="hidden" name="Id" id="roleId" value="@Model.Id"/>
+    <div class="form-floating">
+        <input asp-for="Name" class="form-control" value="@Model.Name" id="roleName" />
+        <label asp-for="Name" for="roleName"></label>
+        <div id="roleNameError" class="invalid-feedback">
+            Role name is required
+        </div>
+    </div>
+    
+
+    <div class="mt-3">
+        <button type="submit" id="editRole" class="btn btn-success">Edit</button>
+        <a class="btn btn-danger" asp-action="Index">Cancel</a>
+    </div>
+</form>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+<script>
+  $(document).ready(function () {
+       $('#editRole').click(function (e) {
+            e.preventDefault();
+            console.log('clicked')
+            var roleName = $('#roleName').val().trim();
+            if (validateInput(roleName)){
+                editRole(roleName);
+            }
+        });
+         // When pressing Enter inside the textbox
+        $('#roleName').keydown(function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault(); // prevent form submission / page reload
+                var roleName = $('#roleName').val().trim();
+                if (validateInput(roleName)){
+                    editRole(roleName);
+                }
+            }
+        });
+        function validateInput(roleName) {
+            if (!roleName) {
+                $("#roleName").addClass("is-invalid");
+                $("#roleNameError").show();
+                return false;
+            }
+
+            $("#roleName").removeClass("is-invalid");
+            $("#roleNameError").hide();
+            return true;
+        }
+
+         function editRole(roleName){
+               var roleId = $('#roleId').val();                     
+               console.log(roleId);
+               var dataJson = JSON.stringify({ name: roleName, Id: roleId });
+               var token = $('input[name="__RequestVerificationToken"]').val();
+                    
+            
+
+               $.ajax({
+                          type: "PUT",
+                          url: `/api/RoleApi/UpdateRole/${roleId}`,
+                          headers: {
+                              "X-CSRF-TOKEN": token
+                          },
+                          data: dataJson,
+                          contentType: "application/json; charset=utf-8",
+                          dataType: "json",
+                          success: function (response) {
+                              console.log(response);
+                            if(response.success){
+                                  ToastSuccess("Role has been updated successfully.");
+                                  //redirect to index page
+                                  window.location.href = '@Url.Action("Index", "Role")';
+                            }else{
+                                  ToastError(response.message);
+                            }
+                          },
+                          error: function (xhr, status, error) {
+                              console.error("API call failed: " + status + ", " + error);
+                              let message = xhr.responseJSON?.message || xhr.responseText || "Something went wrong";
+                              ToastError(message);
+
+                          }
+                      });
+         }
+  });
+</script>
+}

@@ -1,24 +1,15 @@
 ﻿@if (User.Identity.IsAuthenticated)
 {
+    var user = User.Identity.Name.Remove(User.Identity.Name.IndexOf('@') > 0 ? User.Identity.Name.IndexOf('@') : User.Identity.Name.Length);
+    <span class="fw-semibold">Hello, @user</span>
+    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="rounded-circle" width="40" height="40" alt="Samantha">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="Logout">Logout</a>
 
-    <li class="nav-item ms-auto">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
-    </li>
-    <li class="nav-item ms-auto">
-        @{
-            var user = User.Identity.Name.Remove(User.Identity.Name.IndexOf('@') > 0 ? User.Identity.Name.IndexOf('@') : User.Identity.Name.Length);
-        }
-        <span>@user</span>
-
-    </li>
 }
 else
 {
-    <li class="nav-item ms-auto">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-    </li>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="Login">Login</a>
 
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">SignUp</a>
-    </li>
+
+    <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="Register">SignUp</a>
 }

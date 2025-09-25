@@ -1,6 +1,6 @@
 using CorrelationId;
 using Infrastructure.RealTime;
-using Web.Middleware;
+using MVC.Middleware;
 
 namespace Web;
 
@@ -30,7 +30,7 @@ public class Program
         app.UseSerilogRequestLogging();
         app.MapHub<NotificationHub>("/notificationHub");
 
-        app.UseMiddleware<ExceptionMiddleware>();
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
         app.UseHangfireDashboard("/hangfire");
 
         app.UseHttpsRedirection();
@@ -38,6 +38,7 @@ public class Program
 
         app.UseRouting();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllerRoute(

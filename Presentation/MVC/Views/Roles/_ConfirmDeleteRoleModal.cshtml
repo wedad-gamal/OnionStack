@@ -1,0 +1,26 @@
+﻿@model RoleDto
+
+<div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="confirmDeleteRoleLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">    
+            <form id="deleteRoleForm">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteRoleLabel">Delete Role: @Model.Name</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Id" id="confirmDeleteRoleId" value="@Model.Id" />
+                    <div class="mb-3">
+                    Are you sure you want to delete the role: <strong>@Model.Name</strong>?
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>            
+            </form>
+        </div>
+    </div>
+</div>
+

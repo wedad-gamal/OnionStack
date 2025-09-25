@@ -1,4 +1,4 @@
-﻿namespace Web.ViewModels;
+﻿namespace MVC.ViewModels;
 
 public class UserRoleViewModel
 {

@@ -1,10 +1,8 @@
-﻿using Application.DTOs.Identity;
-
-namespace Application.Common.Interfaces.Services
+﻿namespace Application.Common.Interfaces.Services
 {
     public interface IRoleService
     {
-        Task<IdentityResultDto> CreateRoleAsync(string roleName);
+        Task<IdentityResultDto> CreateRoleAsync(RoleDto roleDto);
         Task<IEnumerable<RoleDto>> GetAsync();
         Task<IdentityResultDto> RemoveRoleAsync(string roleName);
         Task<IdentityResultDto> UpdateRoleAsync(RoleDto role);

@@ -1,5 +1,4 @@
-﻿using Application.Common.Interfaces.Identity;
-using Application.Common.Interfaces.Repositories;
+﻿using Infrastructure.Services.Logging;
 
 namespace Infrastructure.BinderModule
 {
@@ -12,14 +11,14 @@ namespace Infrastructure.BinderModule
             services.AddSignalR();
             services.AddMediatR(typeof(ChangeRoleHandler).Assembly);
 
-            services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(config.GetConnectionString("DefaultConnection"))
+                       .UseLazyLoadingProxies()
+                );
 
-            services.AddDbContext<IdentityDbContext>(options =>
-                options.UseSqlServer(config.GetConnectionString("IdentityConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             MapsterConfig.RegisterMappings();
@@ -30,16 +29,15 @@ namespace Infrastructure.BinderModule
             services.AddSingleton(configInstance);
             //
 
+            services.AddScoped<IServiceManager, ServiceManager>();
+
+
             services.AddHttpContextAccessor();
             services.AddScoped<ICorrelationIdAccessor, CorrelationIdAccessor>();
+            services.AddScoped<IErrorLogService, ErrorLogService>();
 
-
-
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<IAppUserManager, AppUserManager>();
+            services.AddScoped<IAppUserService, AppUserService>();
 
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IRoleService, RoleService>();

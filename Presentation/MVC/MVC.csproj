@@ -5,13 +5,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>e4e72a93-7137-46a8-88f7-aefd5c5a6eb9</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Filters\" />
-  </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="CorrelationId" Version="3.0.1" />		
+		<PackageReference Include="CorrelationId" Version="3.0.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />		
 		<PackageReference Include="Serilog" Version="4.3.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
 		<PackageReference Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />

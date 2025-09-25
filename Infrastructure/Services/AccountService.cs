@@ -1,34 +1,28 @@
-﻿using Application.Common.Interfaces.Identity;
-using Application.DTOs.Identity;
-using System.Security.Claims;
-
-namespace Infrastructure.Services
+﻿namespace Infrastructure.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly IAppUserManager _appUserManager;
+        private readonly IAppUserService _appUserService;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
         private readonly IUrlGenerator _urlGenerator;
         private readonly ILoggerManager _loggerManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AccountService(IAppUserManager appUserManager, SignInManager<ApplicationUser> signInManager,
-            IEmailService emailService, IUrlGenerator urlGenerator, ILoggerManager loggerManager,
-            UserManager<ApplicationUser> userManager)
+        public AccountService(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager,
+            IAppUserService appUserService, IUrlGenerator urlGenerator, ILoggerManager loggerManager)
         {
-            _appUserManager = appUserManager;
             _signInManager = signInManager;
-            _emailService = emailService;
+            _userManager = userManager;
+            _appUserService = appUserService;
             _urlGenerator = urlGenerator;
             _loggerManager = loggerManager;
-            _userManager = userManager;
         }
         public async Task<IdentityResultDto> ForgotPassword(string email, string action, string controller)
         {
             _loggerManager.Info("Attempting to send password reset email to: {Email}", email);
 
-            var token = await _appUserManager.GeneratePasswordResetTokenAsync(email);
+            var token = await _appUserService.GeneratePasswordResetTokenAsync(email);
             var url = _urlGenerator.GenerateUrl(email, token, action, controller);
             await _emailService.SendEmailAsync(email, "Reset Password", url);
 
@@ -42,7 +36,7 @@ namespace Infrastructure.Services
         public async Task<IdentityResultDto> LoginAsync(LoginDto loginDto)
         {
             _loggerManager.Info("Attempting to log in user: {Email}", loginDto.Email);
-            return await _appUserManager.LoginAsync(loginDto);
+            return await _appUserService.LoginAsync(loginDto);
         }
 
         public async Task Logout()
@@ -54,13 +48,13 @@ namespace Infrastructure.Services
         public async Task<IdentityResultDto> RegisterAsync(CreateUserDto createUserDto)
         {
             _loggerManager.Info("Attempting to register user: {Email}", createUserDto.Email);
-            return await _appUserManager.CreateUserAsync(createUserDto);
+            return await _appUserService.CreateUserAsync(createUserDto);
         }
 
         public async Task<IdentityResultDto> ResetPasswordAsync(ResetPasswordDto changePasswordDto)
         {
             _loggerManager.Info("Attempting to reset password for user: {Email}", changePasswordDto.Email);
-            return await _appUserManager.ResetPasswordAsync(changePasswordDto.Email, changePasswordDto.Token, changePasswordDto.Password);
+            return await _appUserService.ResetPasswordAsync(changePasswordDto.Email, changePasswordDto.Token, changePasswordDto.Password);
         }
 
         public AuthenticationPropertiesDto ConfigureExternalAuthenticationProperties(string provider, string redirectUrl)
@@ -138,14 +132,12 @@ namespace Infrastructure.Services
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                user = new ApplicationUser
-                {
-                    UserName = email,
-                    Email = email,
-                    FirstName = firstName,
-                    LastName = lastName,
-                    ProfilePictureUrl = profilePicture
-                };
+                user = new ApplicationUser(email, email);
+                user.FirstName = firstName;
+                user.LastName = lastName;
+                user.ProfilePictureUrl = profilePicture;
+
+                ;
                 var createResult = await _userManager.CreateAsync(user);
                 if (!createResult.Succeeded)
                 {

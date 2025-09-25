@@ -1,4 +1,4 @@
-﻿namespace Web.Middleware;
+﻿namespace MVC.Middleware;
 
 public class CorrelationIdMiddleware
 {
