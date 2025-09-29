@@ -1,7 +1,4 @@
-﻿using Application.Common.Interfaces.Background;
-using Infrastructure.BackgroundJobs;
-using Moq;
-using System.Linq.Expressions;
+﻿
 
 namespace Infrastructure.IntegrationTests.Background
 {

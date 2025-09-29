@@ -21,6 +21,9 @@ body {
         margin-bottom: 8px;
     }
 
+    .logo{
+        max-width: 50px;
+    }
 .dashboard-header {
     background: #fff;
     border-radius: 24px;

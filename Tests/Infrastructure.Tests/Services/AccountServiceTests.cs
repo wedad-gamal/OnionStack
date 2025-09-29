@@ -1,7 +1,4 @@
-﻿using Mapster;
-using System.Security.Claims;
-using Tests.Common;
-
+﻿
 namespace Infrastructure.IntegrationTests.Services
 {
     [Collection("Mapster")]

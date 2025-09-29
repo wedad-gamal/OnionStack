@@ -1,5 +1,5 @@
-﻿using Application.Common.Interfaces.Background;
-using Application.Common.Interfaces.Services;
+﻿using Abstraction.Abstraction.Interfaces.Background;
+using Abstraction.Abstraction.Interfaces.Services;
 
 namespace Application.Handlers
 {

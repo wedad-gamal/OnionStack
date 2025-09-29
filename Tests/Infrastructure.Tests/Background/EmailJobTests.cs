@@ -1,7 +1,4 @@
-﻿using Application.Common.Interfaces.Logging;
-using Application.Common.Interfaces.Services;
-using Infrastructure.BackgroundJobs;
-using Moq;
+﻿
 
 namespace Infrastructure.IntegrationTests.Background
 {

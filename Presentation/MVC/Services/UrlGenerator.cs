@@ -1,6 +1,4 @@
-﻿using Application.Common.Interfaces.Services;
-
-namespace Web.Services;
+﻿namespace Web.Services;
 
 public class UrlGenerator : IUrlGenerator
 {

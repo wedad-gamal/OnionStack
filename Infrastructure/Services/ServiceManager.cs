@@ -8,7 +8,8 @@ internal class ServiceManager : IServiceManager
         ISmsService smsService,
         INotificationService notificationService,
         IRoleService roleService,
-        IEmployeeService employeeService)
+        IEmployeeService employeeService,
+        ICategoryService categoryService)
     {
         AppUserService = appUserService;
         AccountService = accountService;
@@ -17,6 +18,7 @@ internal class ServiceManager : IServiceManager
         NotificationService = notificationService;
         RoleService = roleService;
         EmployeeService = employeeService;
+        CategoryService = categoryService;
     }
 
     public IAppUserService AppUserService { get; }
@@ -26,4 +28,5 @@ internal class ServiceManager : IServiceManager
     public INotificationService NotificationService { get; }
     public IRoleService RoleService { get; }
     public IEmployeeService EmployeeService { get; }
+    public ICategoryService CategoryService { get; }
 }

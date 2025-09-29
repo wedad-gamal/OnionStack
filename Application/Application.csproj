@@ -17,8 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Interfaces\Repositories\" />
+    <Folder Include="Abstraction\Interfaces\Repositories\" />
     <Folder Include="Features\" />
+    <Folder Include="Abstractions\" />
   </ItemGroup>
 
 </Project>

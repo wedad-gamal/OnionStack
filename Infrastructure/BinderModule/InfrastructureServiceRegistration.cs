@@ -1,72 +1,73 @@
-﻿using Infrastructure.Services.Logging;
+﻿using Infrastructure.Services.Features;
+using Infrastructure.Services.Logging;
 
-namespace Infrastructure.BinderModule
+namespace Infrastructure.BinderModule;
+
+public static class InfrastructureServiceRegistration
 {
-    public static class InfrastructureServiceRegistration
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration config)
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration config)
-        {
+        // 📦 DbContext
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(config.GetConnectionString("DefaultConnection"))
+                   .UseLazyLoadingProxies()
+        );
 
+        // 🔑 Identity
+        services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
-            services.AddSignalR();
-            services.AddMediatR(typeof(ChangeRoleHandler).Assembly);
+        // 🔔 SignalR
+        services.AddSignalR();
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(config.GetConnectionString("DefaultConnection"))
-                       .UseLazyLoadingProxies()
-                );
+        // 📬 MediatR
+        services.AddMediatR(typeof(ChangeRoleHandler).Assembly);
 
+        // 🗺️ Mapster
+        MapsterConfig.RegisterMappings();
+        services.AddMapster();
+        var configInstance = TypeAdapterConfig.GlobalSettings;
+        configInstance.Scan(typeof(AssemblyMarker).Assembly);
+        services.AddSingleton(configInstance);
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+        // 🛠️ Infrastructure cross-cutting
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICorrelationIdAccessor, CorrelationIdAccessor>();
+        services.AddScoped<IErrorLogService, ErrorLogService>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            MapsterConfig.RegisterMappings();
-            services.AddMapster();
+        // 📌 Core services
+        services.AddScoped<IAppUserService, AppUserService>();
+        services.AddScoped<IEmployeeService, EmployeeService>();
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddTransient<ISmsService, WhatsAppService>();
+        services.AddScoped<ICategoryService, CategoryService>();
 
-            var configInstance = TypeAdapterConfig.GlobalSettings;
-            configInstance.Scan(typeof(AssemblyMarker).Assembly);
-            services.AddSingleton(configInstance);
-            //
+        // 👑 Service aggregator
+        services.AddScoped<IServiceManager, ServiceManager>();
 
-            services.AddScoped<IServiceManager, ServiceManager>();
+        // 📬 MailKit setup
+        services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
 
+        // 📱 Twilio setup
+        services.Configure<TwilioSettings>(config.GetSection("TwilioSettings"));
+        //services.AddKeyedScoped<ISmsService, Services.WhatsAppService>("whatsapp");
+        //services.AddKeyedScoped<ISmsService, Services.SmsService>("sms");
 
-            services.AddHttpContextAccessor();
-            services.AddScoped<ICorrelationIdAccessor, CorrelationIdAccessor>();
-            services.AddScoped<IErrorLogService, ErrorLogService>();
+        // 🧵 Hangfire
+        services.AddHangfire(x => x.UseSqlServerStorage(config.GetConnectionString("HangfireConnection")));
+        services.AddHangfireServer();
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IAppUserService, AppUserService>();
+        // Background jobs
+        services.AddScoped<IHangfireClient, HangfireClient>();
+        services.AddScoped<IBackgroundJobService, BackgroundJobService>();
+        services.AddScoped<IEmailJob, EmailJob>();
+        services.AddScoped<IOnboardingJob, OnboardingJob>();
 
-            services.AddScoped<IEmployeeService, EmployeeService>();
-            services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<INotificationService, NotificationService>();
-
-            //// 📬 MailKit setup
-            services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
-            services.AddScoped<IEmailService, EmailService>();
-
-            // Bind Twilio settings
-            services.Configure<TwilioSettings>(config.GetSection("TwilioSettings"));
-            services.AddTransient<ISmsService, WhatsAppService>();
-            //services.AddKeyedScoped<ISmsService, Services.WhatsAppService>("whatsapp");
-            //services.AddKeyedScoped<ISmsService, Services.SmsService>("sms");
-
-            //// 🧵 Hangfire setup
-            services.AddHangfire(x => x.UseSqlServerStorage(config.GetConnectionString("HangfireConnection")));
-            services.AddHangfireServer();
-
-
-
-            // Register background job service
-            services.AddScoped<IHangfireClient, HangfireClient>();
-            services.AddScoped<IBackgroundJobService, BackgroundJobService>();
-            // Register jobs
-            services.AddScoped<IEmailJob, EmailJob>();
-            services.AddScoped<IOnboardingJob, OnboardingJob>();
-            return services;
-        }
+        return services;
     }
 }
