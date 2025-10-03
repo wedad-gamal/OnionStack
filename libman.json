@@ -9,6 +9,10 @@
     {
       "library": "chart@0.1.2",
       "destination": "wwwroot/lib/chart"
+    },
+    {
+      "library": "bootbox@6.0.4",
+      "destination": "wwwroot/lib/bootbox"
     }
   ]
 }

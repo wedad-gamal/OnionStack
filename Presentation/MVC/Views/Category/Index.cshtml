@@ -70,19 +70,38 @@ else
         $(document).ready(function() {
           $(".js-toggle-status").on("click", function(e){
               var btn = $(this);
-
-              $.post({
-                  url: "/Category/ToggleStatus/"+ btn.data("id"),
-                  success:function(category){
-                      console.log(category);
-                      console.log(category.data.modifiedOnFormated);
-                      var status = btn.parents("tr").find(".js-status");
-                      var newStatus = status.text().trim() === 'Deleted' ? 'Avaible': 'Deleted';
-                      status.text(newStatus).toggleClass("bg-danger bg-success")
-                      btn.parents("tr").find(".js-modified-on").text(category.data.modifiedOnFormated);
-                  }
-              })
-
+            bootbox.confirm({
+                message: 'Are you sure, want to toggle status?',
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if(result)
+                    {
+                         $.post({
+                          url: "/Category/ToggleStatus/"+ btn.data("id"),
+                          success:function(category){
+                              var row = btn.parents("tr");
+                              var status = row.find(".js-status");
+                              var newStatus = status.text().trim() === 'Deleted' ? 'Avaible': 'Deleted';
+                              status.text(newStatus).toggleClass("bg-danger bg-success")
+                              row.find(".js-modified-on").text(category.data.modifiedOnFormated);
+                              row.addClass("animate__animated animate__fadeIn");
+                              setTimeout(() => {
+                                row.removeClass("animate__animated animate__fadeIn");
+                              }, 1200);
+                          }
+                        })
+                   }
+                }
+            });
           })
         });
 

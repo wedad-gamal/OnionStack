@@ -1,0 +1,63 @@
+{
+  "name": "bootbox",
+  "version": "6.0.4",
+  "description": "Wrappers for JavaScript alert(), confirm(), prompt(), and other flexible dialogs using the Bootstrap framework",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "karma start karma.conf.legacy.js && karma start karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bootboxjs/bootbox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bootboxjs/bootbox/issues"
+  },
+  "author": "Nick Payne <nick@kurai.co.uk>",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "main": "dist/bootbox.js",
+  "files": [
+    "dist/*.js"
+  ],
+  "devDependencies": {
+    "@popperjs/core": "^2.11.8",
+    "@sinonjs/fake-timers": "^10.3.0",
+    "bootstrap": "^5.3.3",
+    "chai": "^4.5.0",
+    "eslint": "^8.57.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.6.0",
+    "grunt": "^1.6.1",
+    "grunt-contrib-concat": "^2.1.0",
+    "grunt-contrib-jshint": "^3.2.0",
+    "grunt-contrib-uglify": "^5.2.2",
+    "grunt-jsbeautifier": "^0.2.13",
+    "grunt-karma": "^4.0.2",
+    "jquery": "^3.7.1",
+    "karma": "^6.4.4",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-coverage": "^2.2.1",
+    "karma-htmlfile-reporter": "^0.3.8",
+    "karma-junit-reporter": "^2.0.1",
+    "karma-mocha": "^2.0.1",
+    "karma-sinon-chai": "^2.0.2",
+    "karma-webpack": "^5.0.1",
+    "mocha": "^10.8.2",
+    "puppeteer": "^23.11.1",
+    "sinon": "^15.2.0",
+    "sinon-chai": "^3.7.0",
+    "uglify-js": "^3.19.3",
+    "webpack": "^5.98.0"
+  },
+  "peerDependencies": {
+    "@popperjs/core": "^2.0.0",
+    "bootstrap": "^4.4.0 || ^5.0.0",
+    "jquery": "^3.5.1"
+  }
+}

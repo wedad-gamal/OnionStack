@@ -6,6 +6,24 @@
       "library": "jquery-toast-plugin@1.3.2",
       "destination": "wwwroot/lib/jquery-toast-plugin"
     },
-  
+    {
+      "provider": "cdnjs",
+      "library": "bootbox.js@6.0.4",
+      "destination": "wwwroot/lib/bootbox.js/",
+      "files": [
+        "bootbox.min.js",
+        "bootbox.js"
+      ]
+    }
+  ,
+{
+  "provider": "unpkg",
+  "library": "animate.css@4.1.1",
+  "destination": "wwwroot/lib/animate.css",
+  "files": [
+    "animate.css",
+    "animate.min.css"
   ]
+}
+]
 }
