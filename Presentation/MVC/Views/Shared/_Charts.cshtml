@@ -1,0 +1,86 @@
+﻿@section Scritps{
+    <script>
+        // Pie Chart
+        new Chart(document.getElementById('pieChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Total Order', 'Customer Growth', 'Total Revenue'],
+                datasets: [{
+                    data: [81, 22, 62],
+                    backgroundColor: ['#ff4d4f', '#3bb77e', '#3498db'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                cutout: '70%',
+                plugins: {legend: {display: false}},
+            }
+        });
+        // Order Chart
+        new Chart(document.getElementById('orderChart'), {
+            type: 'line',
+            data: {
+                labels: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+                datasets: [{
+                    label: 'Order',
+                    data: [120, 190, 456, 300, 220, 380, 410],
+                    borderColor: '#3bb77e',
+                    backgroundColor: 'rgba(59,183,126,0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#3bb77e',
+                }]
+            },
+            options: {
+                plugins: {legend: {display: false}},
+                scales: {y: {beginAtZero: true}}
+            }
+        });
+        // Customer Map Chart
+        new Chart(document.getElementById('customerMapChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+                datasets: [{
+                    label: 'Customers',
+                    data: [40, 60, 80, 50, 70, 60, 90],
+                    backgroundColor: '#ffc107',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                plugins: {legend: {display: false}},
+                scales: {y: {beginAtZero: true}}
+            }
+        });
+        // Revenue Chart
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'],
+                datasets: [
+                    {
+                        label: '2020',
+                        data: [12, 19, 3, 5, 2, 3, 9, 15, 20, 25, 22, 30],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52,152,219,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: '2021',
+                        data: [22, 29, 15, 25, 12, 33, 19, 25, 30, 35, 32, 40],
+                        borderColor: '#3bb77e',
+                        backgroundColor: 'rgba(59,183,126,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                plugins: {legend: {display: true}},
+                scales: {y: {beginAtZero: true}}
+            }
+        });
+    </script>
+}

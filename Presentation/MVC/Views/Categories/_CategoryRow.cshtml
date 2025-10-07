@@ -1,0 +1,34 @@
+﻿@model CategoryDto
+<tr>
+    <td>@Model.Id</td>
+     <td>@Model.Name</td>
+    <td>
+        <span class="badge rounded-pill bg-@(Model.IsDeleted ? "danger" : "success") js-status">
+            @(Model.IsDeleted ? "Deleted" : "Avaible")
+        </span>
+
+    </td>
+    <td>@Model.CreatedOn</td>
+    <td class="js-modified-on">@Model.ModifiedOn</td>
+    <td>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-gear-fill"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li>
+                    <a class="dropdown-item js-modal" href="javascript:;" 
+                    data-url="/Categories/Edit/@Model.Id" data-title="Edit Category" data-edit="true">
+                        Edit
+                    </a>
+                </li>
+                <li><a class="dropdown-item js-delete-modal" href="javascript:;" data-title="Delete Category" 
+                     data-url="/Categories/Delete/@Model.Id">
+                        Delete
+                    </a>
+                </li>
+                <li><a class="dropdown-item js-toggle-status" href="#" data-id="@Model.Id">Toggle</a></li>
+            </ul>
+        </div>
+    </td>
+</tr>

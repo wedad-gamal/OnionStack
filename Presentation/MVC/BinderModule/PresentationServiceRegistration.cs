@@ -1,7 +1,4 @@
-﻿
-
-using MVC.Apis.Filters;
-using MVC.Filters;
+﻿using MVC.Filters;
 
 namespace Web.BinderModule;
 
@@ -13,17 +10,17 @@ public static class PresentationServiceRegistration
         {
             options.Filters.Add<CustomExceptionFilter>();
         });
-        services.AddControllers(options =>
-        {
-            options.Filters.Add<ApiResponseFilter>();
-        });
-        services.AddAntiforgery(options =>
-        {
-            options.Cookie.Name = "XSRF-TOKEN"; // Angular expects this name
-            options.HeaderName = "X-XSRF-TOKEN"; // Angular sends this header
-            options.HeaderName = "X-CSRF-TOKEN"; // Custom header name for AJAX
+        //services.AddControllers(options =>
+        //{
+        //    options.Filters.Add<ApiResponseFilter>();
+        //});
+        //services.AddAntiforgery(options =>
+        //{
+        //    options.Cookie.Name = "XSRF-TOKEN"; // Angular expects this name
+        //    options.HeaderName = "X-XSRF-TOKEN"; // Angular sends this header
+        //    options.HeaderName = "X-CSRF-TOKEN"; // Custom header name for AJAX
 
-        });
+        //});
 
         // Add Correlation ID services
         services.AddDefaultCorrelationId(options =>

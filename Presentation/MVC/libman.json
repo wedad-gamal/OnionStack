@@ -25,5 +25,26 @@
     "animate.min.css"
   ]
 }
+,
+{
+  "provider": "unpkg",
+  "library": "sweetalert2@11.23.0",
+  "destination": "wwwroot/lib/sweetalert2",
+  "files": [
+    "dist/sweetalert2.min.css",
+    "dist/sweetalert2.all.min.js",
+    "dist/sweetalert2.all.js"
+  ]
+}
+,
+{
+  "provider": "unpkg",
+  "library": "jquery-ajax-unobtrusive@3.2.6",
+  "destination": "wwwroot/lib/jquery-ajax-unobtrusive",
+  "files": [
+    "dist/jquery.unobtrusive-ajax.js",
+    "dist/jquery.unobtrusive-ajax.min.js"
+  ]
+}
 ]
 }

@@ -9,14 +9,24 @@ internal class CategoryService : ICategoryService
     {
         _unitOfWork = unitOfWork;
     }
-    public Task<CategoryDto> CreateCategoryAsync(CategoryDto categoryDto)
+    public async Task<CategoryDto> CreateCategoryAsync(CreateEditCategortDto categoryDto)
     {
-        throw new NotImplementedException();
+        var category = categoryDto.Adapt<Category>();
+        category.CreatedOn = DateTime.UtcNow;
+        await _unitOfWork.Repository<Category, int>().AddAsync(category);
+        await _unitOfWork.SaveChangesAsync();
+
+        return category.Adapt<CategoryDto>();
     }
 
-    public Task<bool> DeleteCategoryAsync(int id)
+    public async Task<bool> DeleteCategoryAsync(int id)
     {
-        throw new NotImplementedException();
+        var catgory = await _unitOfWork.Repository<Category, int>().GetByIdAsync(id);
+        if (catgory == null)
+            return false;
+        _unitOfWork.Repository<Category, int>().Delete(catgory);
+        await _unitOfWork.SaveChangesAsync();
+        return true;
     }
 
     public async Task<List<CategoryDto>> GetAllCategoriesAsync()
@@ -25,9 +35,10 @@ internal class CategoryService : ICategoryService
         return categories.Adapt<List<CategoryDto>>();
     }
 
-    public Task<CategoryDto> GetCategoryByIdAsync(int id)
+    public async Task<CategoryDto> GetCategoryByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var category = await _unitOfWork.Repository<Category, int>().GetByIdAsync(id);
+        return category.Adapt<CategoryDto>();
     }
 
     public async Task<CategoryDto> ToggleStatus(int id)
@@ -39,8 +50,16 @@ internal class CategoryService : ICategoryService
         return category.Adapt<CategoryDto>();
     }
 
-    public Task<CategoryDto> UpdateCategoryAsync(int id, CategoryDto categoryDto)
+    public async Task<CategoryDto> UpdateCategoryAsync(int id, CreateEditCategortDto categoryDto)
     {
-        throw new NotImplementedException();
+        if (id != categoryDto?.Id)
+            throw new ArgumentException("Category ID mismatch");
+        var category = await _unitOfWork.Repository<Category, int>().GetByIdAsync(id);
+        if (category == null)
+            throw new KeyNotFoundException("Category not found");
+        category.Name = categoryDto.Name;
+        category.ModifiedOn = DateTime.UtcNow;
+        await _unitOfWork.SaveChangesAsync();
+        return category.Adapt<CategoryDto>();
     }
 }

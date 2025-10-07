@@ -1,13 +1,26 @@
 ﻿$.validator.setDefaults({
-    errorClass: "",
-    validClass: "",
+    errorClass: "is-invalid",
+    validClass: "is-valid",
 
     highlight: function (element, errorClass, validClass) {
-        $(element).addClass("is-invalid").removeClass("is-valid");
-        $(element.form).find("data-valmsg-for='" + element.id + "'").addClass("invalid-feedback").removeClass("valid-feedback");
+        $(element)
+            .addClass(errorClass)
+            .removeClass(validClass);
+
+        $(element.form)
+            .find("[data-valmsg-for='" + element.name + "']")
+            .addClass("invalid-feedback")
+            .removeClass("valid-feedback");
     },
-    unheight: function (element, errorClass, validClass) {
-        $(element).addClass("is-valid").removeClass("is-invalid");
-        $(element.form).find("data-valmsg-for='" + element.id + "'").addClass("valid-feedback").removeClass("invalid-feedback");
+
+    unhighlight: function (element, errorClass, validClass) {
+        $(element)
+            .addClass(validClass)
+            .removeClass(errorClass);
+
+        $(element.form)
+            .find("[data-valmsg-for='" + element.name + "']")
+            .addClass("valid-feedback")
+            .removeClass("invalid-feedback");
     }
 });

@@ -1,14 +1,14 @@
 ﻿
-document.addEventListener("DOMContentLoaded", async () => {
-    const form = document.getElementById("addRoleForm");
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        var roleName = $('#roleName').val().trim();
-        if (validateInput(roleName)) {
-           await AddRole(roleName);
-        }
-    });
-});
+//document.addEventListener("DOMContentLoaded", async () => {
+//    const form = document.getElementById("addRoleForm");
+//    form.addEventListener("submit", async (e) => {
+//        e.preventDefault();
+//        var roleName = $('#roleName').val().trim();
+//        if (validateInput(roleName)) {
+//           await AddRole(roleName);
+//        }
+//    });
+//});
 function validateInput(roleName) {
     if (!roleName) {
         $("#roleName").addClass("is-invalid");
