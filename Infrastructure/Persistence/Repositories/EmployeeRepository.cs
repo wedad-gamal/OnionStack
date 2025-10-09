@@ -1,4 +1,4 @@
-﻿using Core.Common;
+﻿using Core.Entities.Common;
 
 namespace Infrastructure.Persistence.Repositories;
 public class EmployeeRepository<TEntity, Tkey> : GenericRepository<TEntity, Tkey>, IEmployeeRepository<TEntity, Tkey>

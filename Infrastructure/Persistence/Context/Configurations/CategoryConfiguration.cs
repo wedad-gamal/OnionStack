@@ -1,6 +1,4 @@
-﻿
-
-namespace Infrastructure.Persistence.Context.Configurations;
+﻿namespace Infrastructure.Persistence.Context.Configurations;
 internal class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)

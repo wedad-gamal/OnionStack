@@ -1,5 +1,7 @@
 ﻿
 
+using Application.Abstraction.Interfaces.Common;
+
 namespace Infrastructure.IntegrationTests.Background
 {
     public class EmailJobTests

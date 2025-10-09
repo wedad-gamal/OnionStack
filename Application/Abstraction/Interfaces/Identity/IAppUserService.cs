@@ -1,4 +1,6 @@
-﻿namespace Abstraction.Abstraction.Interfaces.Identity
+﻿using Application.DTOs.Common;
+
+namespace Abstraction.Abstraction.Interfaces.Identity
 {
     public interface IAppUserService
     {

@@ -1,13 +1,13 @@
 ﻿global using Abstraction.Abstraction.Interfaces.Background;
 global using Abstraction.Abstraction.Interfaces.Identity;
 global using Abstraction.Abstraction.Interfaces.Logging;
-global using Abstraction.Abstraction.Interfaces.Services;
-global using Application.DTOs;
+global using Application.Abstraction.Interfaces.Common;
+global using Application.DTOs.Common;
 global using Application.DTOs.Identity;
 global using FluentAssertions;
 global using Infrastructure.BackgroundJobs;
 global using Infrastructure.Persistence.Identity;
-global using Infrastructure.Services;
+global using Infrastructure.Services.Common;
 global using Mapster;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Identity;

@@ -23,17 +23,9 @@ public class ExceptionHandlingMiddleware
             await errorLogService.LogAsync(ex, context);
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            if (context.Request.Path.StartsWithSegments("/api"))
-            {
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(
-                    JsonSerializer.Serialize(new { error = ex.Message })
-                );
-            }
-            else
-            {
-                context.Response.Redirect("/Home/Error");
-            }
+
+            context.Response.Redirect("/Home/Error");
+
         }
     }
 }

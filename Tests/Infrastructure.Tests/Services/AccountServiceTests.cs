@@ -1,5 +1,4 @@
-﻿
-namespace Infrastructure.IntegrationTests.Services
+﻿namespace Infrastructure.IntegrationTests.Services
 {
     [Collection("Mapster")]
     public class AccountServiceTests : TestBase

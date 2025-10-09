@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Application.DTOs.Common;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Infrastructure.Mapping
 {

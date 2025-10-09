@@ -1,4 +1,6 @@
-﻿namespace MVC.Controllers;
+﻿using Application.DTOs.Common;
+
+namespace MVC.Controllers;
 
 public class ProfileController : Controller
 {

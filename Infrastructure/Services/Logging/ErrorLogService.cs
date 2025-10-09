@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.Entities.Common;
+using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Services.Logging;
 public class ErrorLogService : IErrorLogService
@@ -23,7 +24,7 @@ public class ErrorLogService : IErrorLogService
                 Message = ex.Message,
                 StackTrace = ex.StackTrace,
                 Path = context != null ? context.Request.Path : ex.StackTrace,
-                InnerException = $"{ex.InnerException.Message} {ex.InnerException.InnerException}",
+                InnerException = $"{ex?.InnerException?.Message} {ex?.InnerException?.InnerException}",
                 CorrelationId = _correlationContextAccessor?.CorrelationContext.CorrelationId ?? correlationId
             };
 

@@ -1,6 +1,4 @@
-﻿using MVC.Filters;
-
-namespace Web.BinderModule;
+﻿namespace Web.BinderModule;
 
 public static class PresentationServiceRegistration
 {

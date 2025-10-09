@@ -1,5 +1,7 @@
 ﻿
 
+using Application.DTOs.Common;
+
 namespace Application.Validators.Users
 {
     public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>

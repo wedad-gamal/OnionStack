@@ -1,4 +1,4 @@
-﻿using Core.Common;
+﻿using Core.Entities.Common;
 
 namespace Core.Abstractions
 {

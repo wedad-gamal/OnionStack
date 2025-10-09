@@ -1,4 +1,6 @@
-﻿namespace Web.Controllers
+﻿using Application.DTOs.Common;
+
+namespace Web.Controllers
 {
     public class UsersController : Controller
     {

@@ -1,4 +1,6 @@
-﻿namespace Application.Validators.Users
+﻿using Application.DTOs.Common;
+
+namespace Application.Validators.Users
 {
     class ResetPasswordDtoValidator : AbstractValidator<ResetPasswordDto>
     {

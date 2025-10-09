@@ -1,4 +1,6 @@
-﻿namespace Application.Commands
+﻿using Application.DTOs.Common;
+
+namespace Application.Commands
 {
     public class ChangeRoleCommand : IRequest<bool>
     {

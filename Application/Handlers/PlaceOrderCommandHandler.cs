@@ -1,4 +1,4 @@
-﻿using Core.Entities.Features;
+﻿using Core.Entities;
 
 namespace Application.Handlers;
 public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, Guid>

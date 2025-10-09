@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.BackgroundJobs
+﻿using Application.Abstraction.Interfaces.Common;
+
+namespace Infrastructure.BackgroundJobs
 {
     public class OnboardingJob : IOnboardingJob
     {

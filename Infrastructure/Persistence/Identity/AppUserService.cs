@@ -1,4 +1,5 @@
-﻿using Infrastructure.Extensions;
+﻿using Application.DTOs.Common;
+using Infrastructure.Extensions;
 
 namespace Infrastructure.Persistence.Identity
 {
@@ -113,7 +114,8 @@ namespace Infrastructure.Persistence.Identity
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
             _loggerManager.Info("Retrieving all users.");
-            return await _userManager.Users.Select(user => user.Adapt<UserDto>()).ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
+            return users.Adapt<IEnumerable<UserDto>>();
         }
 
         public async Task<IdentityResultDto> UpdateUserAsync(UserDto userDto)

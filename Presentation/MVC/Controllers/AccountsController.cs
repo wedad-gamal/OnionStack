@@ -1,4 +1,4 @@
-﻿
+﻿using Application.DTOs.Common;
 
 namespace Web.Controllers
 {

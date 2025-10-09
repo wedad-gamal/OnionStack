@@ -1,5 +1,3 @@
-using MVC.ViewModels;
-
 namespace Web.Controllers;
 
 public class HomeController : Controller

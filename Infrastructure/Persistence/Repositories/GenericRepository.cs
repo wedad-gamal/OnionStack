@@ -1,5 +1,4 @@
-﻿
-using Core.Common;
+﻿using Core.Entities.Common;
 
 namespace Infrastructure.Persistence.Repositories
 {

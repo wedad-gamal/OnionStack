@@ -1,7 +1,4 @@
-﻿using Core.Entities.Features;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace Infrastructure.Persistence.Context.Configurations
+﻿namespace Infrastructure.Persistence.Context.Configurations
 {
     class EmployeeConfigurations : IEntityTypeConfiguration<Employee>
     {

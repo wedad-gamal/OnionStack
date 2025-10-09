@@ -1,0 +1,13 @@
+﻿@using Application.DTOs.Common
+@model IEnumerable<UserDto>
+@{
+    ViewData["Title"] = "Users";
+}
+
+
+@{
+    foreach(var item in Model)
+    {
+        <div>@item.Id</div>
+    }
+}
